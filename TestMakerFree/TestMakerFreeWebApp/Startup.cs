@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace TestMakerFreeWebApp
+namespace TestMakerFree
 {
     public class Startup
     {
@@ -41,12 +41,11 @@ namespace TestMakerFreeWebApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            ////app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
+            app.UseStaticFiles(new StaticFileOptions()
             {
                 OnPrepareResponse = (context) =>
                 {
-                    // Disable caching for all static files
+                    // Disable caching for all static files. 
                     context.Context.Response.Headers["Cache-Control"] = Configuration["StaticFiles:Headers:Cache-Control"];
                     context.Context.Response.Headers["Pragma"] = Configuration["StaticFiles:Headers:Pragma"];
                     context.Context.Response.Headers["Expires"] = Configuration["StaticFiles:Headers:Expires"];
