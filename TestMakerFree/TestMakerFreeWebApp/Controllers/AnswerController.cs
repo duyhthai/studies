@@ -9,7 +9,7 @@ namespace TestMakerFreeWebApp.Controllers
     [Route("api/[controller]")]
     public class AnswerController : Controller
     {
-        // GET api/question/all
+        // GET api/answer/all
         [HttpGet("All/{questionId}")]
         public IActionResult All(int questionId)
         {
