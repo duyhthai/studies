@@ -25,7 +25,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\interfaces\quiz.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\_deleted\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\interfaces\quiz.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
