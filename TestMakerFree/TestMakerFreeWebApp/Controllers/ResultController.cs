@@ -9,6 +9,49 @@ namespace TestMakerFreeWebApp.Controllers
     [Route("api/[controller]")]
     public class ResultController : Controller
     {
+        #region RESTful conventions methods
+        /// <summary>
+        /// Retrieves the Result with the given {id}
+        /// </summary>
+        /// <param name="id">The ID of an existing Result</param>
+        /// <returns>the Result with the given {id}</returns>
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            return Content("Not implemented (yet)!");
+        }
+
+        /// <summary>
+        /// Adds a new Result to the Database
+        /// </summary>
+        /// <param name="model">The ResultViewModel containing the data to insert</param>
+        [HttpPut]
+        public IActionResult Put(ResultViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Edit the Result with the given {id}
+        /// </summary>
+        /// <param name="model">The ResultViewModel containing the data to update</param>
+        [HttpPost]
+        public IActionResult Post(ResultViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes the Result with the given {id} from the Database
+        /// </summary>
+        /// <param name="id">The ID of an existing Result</param>
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
         // GET api/result/all
         [HttpGet("All/{quizId}")]
         public IActionResult All(int quizId)

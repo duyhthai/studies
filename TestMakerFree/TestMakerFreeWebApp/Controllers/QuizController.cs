@@ -36,6 +36,36 @@ namespace TestMakerFreeWebApp.Controllers
             // output the result in JSON format
             return new JsonResult(v, new JsonSerializerSettings { Formatting = Formatting.Indented });
         }
+
+        /// <summary>
+        /// Adds a new Quiz to the Database
+        /// </summary>
+        /// <param name="model">The QuizViewModel containing the data to insert</param>
+        [HttpPut]
+        public IActionResult Put(QuizViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Edit the Quiz with the given {id}
+        /// </summary>
+        /// <param name="model">The QuizViewModel containing the data to update</param>
+        [HttpPost]
+        public IActionResult Post(QuizViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Deletes the Quiz with the given {id} from the Database
+        /// </summary>
+        /// <param name="id">The ID of an existing Test</param>
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region Attribute-based routing methods
