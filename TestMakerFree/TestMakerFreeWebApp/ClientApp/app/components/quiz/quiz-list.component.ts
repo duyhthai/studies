@@ -15,7 +15,7 @@ export class QuizListComponent {
     constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
         this.title = "Latest Quizzes";
         var url = baseUrl + "api/quiz/Latest";
-        this.http.get<Quiz[]>(url).subscribe(result => {
+        http.get<Quiz[]>(url).subscribe(result => {
             this.quizzes = result;
         }, error => console.error(error));    
     }
