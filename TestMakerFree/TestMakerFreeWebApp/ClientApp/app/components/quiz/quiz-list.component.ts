@@ -1,4 +1,4 @@
-﻿import { Component, Inject } from "@angular/core";
+﻿import { Component, Inject, Input } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
@@ -8,13 +8,30 @@ import { HttpClient } from "@angular/common/http";
 })
 
 export class QuizListComponent {
+    @Input() class: string;
     title: string;
     selectedQuiz: Quiz;
     quizzes: Quiz[];
 
     constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-        this.title = "Latest Quizzes";
-        var url = baseUrl + "api/quiz/Latest";
+        var url = baseUrl + "api/quiz/";
+
+        switch (this.class) {
+            case "latest":
+            default:
+                this.title = "Latest Quizzes";
+                url += "Latest/";
+                break;
+            case "byTitle":
+                this.title = "Quizzes by Title";
+                url += "ByTitle/";
+                break;
+            case "random":
+                this.title = "Random Quizzes";
+                url += "Random/";
+                break;
+        }
+
         http.get<Quiz[]>(url).subscribe(result => {
             this.quizzes = result;
         }, error => console.error(error));    
