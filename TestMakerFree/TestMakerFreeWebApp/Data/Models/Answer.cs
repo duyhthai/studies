@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestMakerFreeWebApp.Data
 {
-    public class ApplicationUser
+    public class Answer
     {
         #region Constructor
-        public ApplicationUser()
+        public Answer()
         {
         }
         #endregion
@@ -15,23 +16,23 @@ namespace TestMakerFreeWebApp.Data
         #region Properties
         [Key]
         [Required]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
-        [MaxLength(128)]
-        public string UserName { get; set; }
+        public int QuestionId { get; set; }
 
         [Required]
-        public string Email { get; set; }
+        public string Text { get; set; }
 
-        public string DisplayName { get; set; }
+        [Required]
+        public int Value { get; set; }
 
         public string Notes { get; set; }
 
-        [Required]
+        [DefaultValue(0)]
         public int Type { get; set; }
 
-        [Required]
+        [DefaultValue(0)]
         public int Flags { get; set; }
 
         [Required]
@@ -43,9 +44,10 @@ namespace TestMakerFreeWebApp.Data
 
         #region Lazy-Load Properties
         /// <summary>
-        /// A list containing all the quiz created by this user.
+        /// The parent question.
         /// </summary>
-        public virtual List<Quiz> Quizzes { get; set; }
+        [ForeignKey("QuestionId")]
+        public virtual Question Question { get; set; }
         #endregion
     }
 }
