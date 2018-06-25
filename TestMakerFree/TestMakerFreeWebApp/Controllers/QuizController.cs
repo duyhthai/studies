@@ -36,6 +36,16 @@ namespace TestMakerFreeWebApp.Controllers
         public IActionResult Get(int id)
         {
             var quiz = Dbcontext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
+
+            // handle requests asking for non-existing quizzes
+            if (quiz == null)
+            {
+                return NotFound(new
+                {
+                    Error = $"Quiz ID {id} has not been found"
+                });
+            }
+
             return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
         }
 
@@ -44,9 +54,36 @@ namespace TestMakerFreeWebApp.Controllers
         /// </summary>
         /// <param name="model">The QuizViewModel containing the data to insert</param>
         [HttpPut]
-        public IActionResult Put(QuizViewModel model)
+        public IActionResult Put([FromBody]QuizViewModel model)
         {
-            throw new NotImplementedException();
+            // return a generic HTTP status 500 (Server Error)
+            // if the client payload is invalid.
+            if (model == null) return new StatusCodeResult(500);
+
+            // handle the insert (without object-mapping)
+            // properties taken from the request
+            var quiz = new Quiz
+            {
+                Title = model.Title,
+                Description = model.Description,
+                Text = model.Text,
+                Notes = model.Notes
+            };
+
+            // properties taken from server-side
+            quiz.CreatedDate = DateTime.Now;
+            quiz.LastModifiedDate = quiz.CreatedDate;
+
+            // Set a temporary author using the Admin user's userId
+            // as user login isn't supported yet: we'll change this later on
+            quiz.UserId = Dbcontext.Users.Where(u => u.UserName == "Admin").FirstOrDefault().Id;
+
+            // add the new quiz
+            Dbcontext.Quizzes.Add(quiz);
+            Dbcontext.SaveChanges();
+
+            // return the newly-created Quiz to the client.
+            return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
         }
 
         /// <summary>
@@ -54,9 +91,37 @@ namespace TestMakerFreeWebApp.Controllers
         /// </summary>
         /// <param name="model">The QuizViewModel containing the data to update</param>
         [HttpPost]
-        public IActionResult Post(QuizViewModel model)
+        public IActionResult Post([FromBody]QuizViewModel model)
         {
-            throw new NotImplementedException();
+            // return a generic HTTP status 500 (Server Error)
+            // if the client payload is invalid.
+            if (model == null) return new StatusCodeResult(500);
+
+            // retrieve the quiz to edit
+            var quiz = Dbcontext.Quizzes.Where(q => q.Id == model.Id).FirstOrDefault();
+
+            // handle requests asking for non-existing quizzes
+            if (quiz == null)
+            {
+                return NotFound(new { Error = $"Quiz ID {model.Id} has not been found" });
+            }
+
+            // handle the update (without object-mapping)
+            // by manually assigning the properties
+            // we want to accept from the request
+            quiz.Title = model.Title;
+            quiz.Description = model.Description;
+            quiz.Text = model.Text;
+            quiz.Notes = model.Notes;
+
+            // properties set from server-side
+            quiz.LastModifiedDate = DateTime.Now;
+
+            // persit the changes into the Database.
+            Dbcontext.SaveChanges();
+
+            // return the updated Quiz to the client.
+            return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
         }
 
         /// <summary>
@@ -66,7 +131,21 @@ namespace TestMakerFreeWebApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            // retrieve the quiz from the Database
+            var quiz = Dbcontext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
+
+            // handle requests asking for non-existing quizzes
+            if (quiz == null)
+            {
+                return NotFound(new { Error = $"Quiz ID {id} has not been found" });
+            }
+
+            // remove the quiz from the DbContext.
+            Dbcontext.Quizzes.Remove(quiz);
+            Dbcontext.SaveChanges();
+
+            // return an HTTP status 200 (OK)
+            return new OkResult();
         }
         #endregion
 
