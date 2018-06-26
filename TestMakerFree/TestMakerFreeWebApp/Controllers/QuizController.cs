@@ -10,19 +10,10 @@ using TestMakerFreeWebApp.ViewModels;
 
 namespace TestMakerFreeWebApp.Controllers
 {
-    [Route("api/[controller]")]
-    public class QuizController : Controller
+    public class QuizController : BaseApiController
     {
-        #region Private Fields
-        private ApplicationDbContext Dbcontext;
-        #endregion
-
         #region Constructor
-        public QuizController(ApplicationDbContext context)
-        {
-            // Instantiate the ApplicationDbContext through DI
-            Dbcontext = context;
-        }
+        public QuizController(ApplicationDbContext context) : base(context) { }
         #endregion
 
         #region RESTful conventions methods
@@ -35,7 +26,7 @@ namespace TestMakerFreeWebApp.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var quiz = Dbcontext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
+            var quiz = DbContext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
 
             // handle requests asking for non-existing quizzes
             if (quiz == null)
@@ -46,7 +37,7 @@ namespace TestMakerFreeWebApp.Controllers
                 });
             }
 
-            return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            return new JsonResult(quiz.Adapt<QuizViewModel>(), JsonSettings);
         }
 
         /// <summary>
@@ -76,14 +67,14 @@ namespace TestMakerFreeWebApp.Controllers
 
             // Set a temporary author using the Admin user's userId
             // as user login isn't supported yet: we'll change this later on
-            quiz.UserId = Dbcontext.Users.Where(u => u.UserName == "Admin").FirstOrDefault().Id;
+            quiz.UserId = DbContext.Users.Where(u => u.UserName == "Admin").FirstOrDefault().Id;
 
             // add the new quiz
-            Dbcontext.Quizzes.Add(quiz);
-            Dbcontext.SaveChanges();
+            DbContext.Quizzes.Add(quiz);
+            DbContext.SaveChanges();
 
             // return the newly-created Quiz to the client.
-            return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            return new JsonResult(quiz.Adapt<QuizViewModel>(), JsonSettings);
         }
 
         /// <summary>
@@ -98,7 +89,7 @@ namespace TestMakerFreeWebApp.Controllers
             if (model == null) return new StatusCodeResult(500);
 
             // retrieve the quiz to edit
-            var quiz = Dbcontext.Quizzes.Where(q => q.Id == model.Id).FirstOrDefault();
+            var quiz = DbContext.Quizzes.Where(q => q.Id == model.Id).FirstOrDefault();
 
             // handle requests asking for non-existing quizzes
             if (quiz == null)
@@ -118,10 +109,10 @@ namespace TestMakerFreeWebApp.Controllers
             quiz.LastModifiedDate = DateTime.Now;
 
             // persit the changes into the Database.
-            Dbcontext.SaveChanges();
+            DbContext.SaveChanges();
 
             // return the updated Quiz to the client.
-            return new JsonResult(quiz.Adapt<QuizViewModel>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            return new JsonResult(quiz.Adapt<QuizViewModel>(), JsonSettings);
         }
 
         /// <summary>
@@ -132,7 +123,7 @@ namespace TestMakerFreeWebApp.Controllers
         public IActionResult Delete(int id)
         {
             // retrieve the quiz from the Database
-            var quiz = Dbcontext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
+            var quiz = DbContext.Quizzes.Where(i => i.Id == id).FirstOrDefault();
 
             // handle requests asking for non-existing quizzes
             if (quiz == null)
@@ -141,11 +132,17 @@ namespace TestMakerFreeWebApp.Controllers
             }
 
             // remove the quiz from the DbContext.
-            Dbcontext.Quizzes.Remove(quiz);
-            Dbcontext.SaveChanges();
+            DbContext.Quizzes.Remove(quiz);
+            DbContext.SaveChanges();
 
             // return an HTTP status 200 (OK)
-            return new OkResult();
+            ////return new OkResult();
+
+            // [2018.01.26] BOOK ERRATA: return a NoContentResult to comply with a bug in the Angular 5 HttpRouter (fixed on December 2017, see here: https://github.com/angular/angular/issues/19502) which expects a JSON by default 
+            // and will throw a SyntaxError: Unexpected end of JSON input in case of an HTTP 200 result with no content.
+            // ref.: https://github.com/angular/angular/issues/19502
+            // ref.: https://github.com/PacktPublishing/ASP.NET-Core-2-and-Angular-5/issues/19
+            return new NoContentResult();
         }
         #endregion
 
@@ -159,8 +156,8 @@ namespace TestMakerFreeWebApp.Controllers
         [HttpGet("Latest/{num:int?}")]
         public IActionResult Latest(int num = 10)
         {
-            var latest = Dbcontext.Quizzes.OrderByDescending(q => q.CreatedDate).Take(num).ToArray();
-            return new JsonResult(latest.Adapt<QuizViewModel[]>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            var latest = DbContext.Quizzes.OrderByDescending(q => q.CreatedDate).Take(num).ToArray();
+            return new JsonResult(latest.Adapt<QuizViewModel[]>(), JsonSettings);
         }
 
         /// <summary>
@@ -172,8 +169,8 @@ namespace TestMakerFreeWebApp.Controllers
         [HttpGet("ByTitle/{num:int?}")]
         public IActionResult ByTitle(int num = 10)
         {
-            var byTitle = Dbcontext.Quizzes.OrderBy(q => q.Title).Take(num).ToArray();
-            return new JsonResult(byTitle.Adapt<QuizViewModel[]>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            var byTitle = DbContext.Quizzes.OrderBy(q => q.Title).Take(num).ToArray();
+            return new JsonResult(byTitle.Adapt<QuizViewModel[]>(), JsonSettings);
         }
 
         /// <summary>
@@ -185,8 +182,8 @@ namespace TestMakerFreeWebApp.Controllers
         [HttpGet("Random/{num:int?}")]
         public IActionResult Random(int num = 10)
         {
-            var random = Dbcontext.Quizzes.OrderBy(q => Guid.NewGuid()).Take(num).ToArray();
-            return new JsonResult(random.Adapt<QuizViewModel[]>(), new JsonSerializerSettings { Formatting = Formatting.Indented });
+            var random = DbContext.Quizzes.OrderBy(q => Guid.NewGuid()).Take(num).ToArray();
+            return new JsonResult(random.Adapt<QuizViewModel[]>(), JsonSettings);
         }
         #endregion
     }
