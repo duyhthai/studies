@@ -1,6 +1,6 @@
 ﻿ul.quizzes li {
-    color: #000acb;
+  color: #000acb;
 }
-    ul.quizzes li.selected {
-        background-color: #cccccc;
-    }
+ul.quizzes li.selected {
+  background-color: #cccccc;
+}
