@@ -2,7 +2,7 @@
 
 <div *ngIf="answers.length > 0">
     <div class="table-responsive">
-        <table class="table table-hover answers">
+        <table class="table table-hover table-striped answers">
             <thead>
                 <tr>
                     <th>Text</th>
@@ -15,10 +15,8 @@
                     <td>{{answer.Text}}</td>
                     <td>{{answer.Value}}</td>
                     <td>
-                        <input type="button" value="Edit"
-                               (click)="onEdit(answer)" />
-                        <input type="button" value="Delete"
-                               (click)="onDelete(answer)" />
+                        <input type="button" value="Edit" (click)="onEdit(answer)" class="btn btn-success btn-xs" />
+                        <input type="button" value="Delete" (click)="onDelete(answer)" class="btn btn-danger btn-xs" />
                     </td>
                 </tr>
             </tbody>

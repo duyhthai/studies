@@ -17,9 +17,9 @@
         <input type="number" id="MaxValue" name="MaxValue" [(ngModel)]="result.MaxValue" class="form-control" />
     </div>
 
-    <div>
-        <input *ngIf="editMode" type="button" value="Apply Changes" (click)="onSubmit(result)" />
-        <input *ngIf="!editMode" type="button" value="Create the Result!" (click)="onSubmit(result)" />
-        <input type="button" value="Cancel" (click)="onBack()" />
+    <div class="form-group commands">
+        <input *ngIf="editMode" type="button" value="Apply Changes" (click)="onSubmit(result)" class="btn btn-success" />
+        <input *ngIf="!editMode" type="button" value="Create the Result!" (click)="onSubmit(result)" class="btn btn-success" />
+        <input type="button" value="Cancel" (click)="onBack()" class="btn btn-default" />
     </div>
 </div>
