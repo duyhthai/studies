@@ -18,6 +18,9 @@
 .body-content {
   margin-top: 100px;
 }
+.table thead tr th {
+  border-bottom: 2px solid #ecf0f1;
+}
 @media (max-width: 767px) {
   .header-content .navbar-header {
     text-align: center;
