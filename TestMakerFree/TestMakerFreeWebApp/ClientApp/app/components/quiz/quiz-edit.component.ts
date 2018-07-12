@@ -1,4 +1,5 @@
 ﻿import { Component, Inject, OnInit } from "@angular/core";
+import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
@@ -10,6 +11,7 @@ import { HttpClient } from "@angular/common/http";
 export class QuizEditComponent {
     title: string;
     quiz: Quiz;
+    form: FormGroup;
 
 	// this will be TRUE when editing an existing quiz,
 	// FALSE when creating a new one.
@@ -18,10 +20,14 @@ export class QuizEditComponent {
     constructor(private activateRoute: ActivatedRoute,
         private router: Router,
         private http: HttpClient,
+        private fb: FormBuilder,
         @Inject('BASE_URL') private baseUrl: string) {
 
 		// create an empty object from the Quiz interface
         this.quiz = <Quiz>{};
+
+        // initialize the form
+        this.createForm();
 
         var id = +this.activateRoute.snapshot.params["id"];
         if (id) {
@@ -33,6 +39,9 @@ export class QuizEditComponent {
             this.http.get<Quiz>(url).subscribe(res => {
                 this.quiz = res;
                 this.title = "Edit - " + this.quiz.Title;
+
+                // update the form with the quiz value
+                this.updateForm();
             }, error => console.error(error));
         } else {
             this.editMode = false;
@@ -40,7 +49,25 @@ export class QuizEditComponent {
         }
     }
 
+    createForm() {
+        this.form = this.fb.group({
+            Title: ['', Validators.required],
+            Description: '',
+            Text: ''
+        })
+    }
+
+    updateForm() {
+        this.form.setValue({
+            Title: this.quiz.Title,
+            Description: this.quiz.Description || '',
+            Text: this.quiz.Text || ''
+        })
+    }
+
     onSubmit(quiz: Quiz) {
+        // build a temporary quiz
+
         var url = this.baseUrl + "api/quiz";
 
         if (this.editMode) {
