@@ -4,7 +4,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 
 @Component({
-    selector: "quiz-edit", templateUrl: './quiz-edit.component.html',
+    selector: "quiz-edit",
+    templateUrl: './quiz-edit.component.html',
     styleUrls: ['./quiz-edit.component.css']
 })
 
@@ -54,7 +55,7 @@ export class QuizEditComponent {
             Title: ['', Validators.required],
             Description: '',
             Text: ''
-        })
+        });
     }
 
     updateForm() {
@@ -62,23 +63,31 @@ export class QuizEditComponent {
             Title: this.quiz.Title,
             Description: this.quiz.Description || '',
             Text: this.quiz.Text || ''
-        })
+        });
     }
 
-    onSubmit(quiz: Quiz) {
-        // build a temporary quiz
+    onSubmit() {
+        // build a temporary quiz object from form values
+        var tempQuiz = <Quiz>{};
+        tempQuiz.Title = this.form.value.Title;
+        tempQuiz.Description = this.form.value.Description;
+        tempQuiz.Text = this.form.value.Text;
 
         var url = this.baseUrl + "api/quiz";
 
         if (this.editMode) {
-            this.http.post<Quiz>(url, quiz).subscribe(res => {
+            // don't forget to set the tempQuiz Id,
+            // otherwise the EDIT would fail!
+            tempQuiz.Id = this.quiz.Id;
+
+            this.http.post<Quiz>(url, tempQuiz).subscribe(res => {
                 var v = res;
                 console.log("Quiz " + v.Id + " has been updated.");
 
                 this.router.navigate(["home"]);
             }, error => console.log(error));
         } else {
-            this.http.put<Quiz>(url, quiz).subscribe(res => {
+            this.http.put<Quiz>(url, tempQuiz).subscribe(res => {
                 var q = res;
                 console.log("Quiz " + q.Id + " has been created.");
 
@@ -89,5 +98,28 @@ export class QuizEditComponent {
 
     onBack() {
         this.router.navigate(["home"]);
+    }
+
+    // retrieve a FormControl
+    getFormControl(name: string) {
+        return this.form.get(name);
+    }
+
+    // returns TRUE if the FormControl is valid
+    isValid(name: string) {
+        var e = this.getFormControl(name);
+        return e && e.valid;
+    }
+
+    // returns TRUE if the FormControl has been changed
+    isChanged(name: string) {
+        var e = this.getFormControl(name);
+        return e && (e.dirty || e.touched);
+    }
+
+    // returns TRUE if the FormControl is invalid after user changes
+    hasError(name: string) {
+        var e = this.getFormControl(name);
+        return e && (e.dirty || e.touched) && !e.valid;
     }
 }
