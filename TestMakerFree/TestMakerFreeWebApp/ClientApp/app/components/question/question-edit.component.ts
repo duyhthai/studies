@@ -73,6 +73,13 @@ export class QuestionEditComponent {
         });
 
         // react to changes in the form.Text control
+        this.form.get("Text")!.valueChanges.subscribe(val => {
+            if (!this.form.dirty) {
+                this.log("Text control has been loaded with initial values.");
+            } else {
+                this.log("Text control was updated by the user.")
+            }
+        });
     }
 
     log(str: string) {
