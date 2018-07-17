@@ -13,6 +13,7 @@ export class QuestionEditComponent {
     title: string;
     question: Question;
     form: FormGroup;
+    activityLog: string;
 
     // this will be TRUE when editing an existing question, 
     //   FALSE when creating a new one.
@@ -58,6 +59,24 @@ export class QuestionEditComponent {
         this.form = this.fb.group({
             Text: ['', Validators.required]
         });
+
+        this.activityLog = '';
+        this.log("Form has been initialized.");
+
+        // react to form changes
+        this.form.valueChanges.subscribe(val => {
+            if (!this.form.dirty) {
+                this.log("Form Model has been loaded.")
+            } else {
+                this.log("Form was updated by the user.")
+            }
+        });
+
+        // react to changes in the form.Text control
+    }
+
+    log(str: string) {
+        this.activityLog += "[" + new Date().toLocaleString() + "]" + str + "<br />";
     }
 
     updateForm() {
