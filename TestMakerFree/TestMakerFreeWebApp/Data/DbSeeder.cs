@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace TestMakerFreeWebApp.Data
@@ -10,10 +11,15 @@ namespace TestMakerFreeWebApp.Data
     public class DbSeeder
     {
         #region Public Methods
-        public static void Seed(ApplicationDbContext dbContext)
+        public static void Seed(ApplicationDbContext dbContext, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             // Create default Users (if there are none)
-            if (!dbContext.Users.Any()) CreateUsers(dbContext);
+            if (!dbContext.Users.Any())
+            {
+                CreateUsers(dbContext, roleManager, userManager)
+                    .GetAwaiter()
+                    .GetResult();
+            }
 
             // Create default Quizzes (if there are none) together with their set of Q&A
             if (!dbContext.Quizzes.Any()) CreateQuizzes(dbContext);
