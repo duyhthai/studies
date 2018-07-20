@@ -29,15 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Controllers\_deleted\SampleDataController.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="ClientApp\app\interfaces\quiz.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\_deleted\" />
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 

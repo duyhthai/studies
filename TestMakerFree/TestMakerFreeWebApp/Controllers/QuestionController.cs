@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mapster;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using TestMakerFreeWebApp.Data;
 using TestMakerFreeWebApp.ViewModels;
@@ -12,7 +14,9 @@ namespace TestMakerFreeWebApp.Controllers
     public class QuestionController : BaseApiController
     {
         #region Constructor
-        public QuestionController(ApplicationDbContext context) : base(context) { }
+        public QuestionController(
+            ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, IConfiguration configuration)
+            : base(context, roleManager, userManager, configuration) { }
         #endregion
 
         #region RESTful conventions methods
