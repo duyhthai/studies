@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using System.Linq;
 
 namespace TestMakerFreeWebApp.Data
 {
@@ -9,7 +12,7 @@ namespace TestMakerFreeWebApp.Data
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
         }
-        #endregion
+        #endregion Constructor
 
         #region Methods
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -37,14 +40,14 @@ namespace TestMakerFreeWebApp.Data
             modelBuilder.Entity<Result>().Property(i => i.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Result>().HasOne(i => i.Quiz).WithMany(u => u.Results);
         }
-        #endregion
+        #endregion Methods
 
         #region Properties
-        ////public DbSet<ApplicationUser> Users { get; set; }
+        // public DbSet<ApplicationUser> Users { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Result> Results { get; set; }
-        #endregion
+        #endregion Properties
     }
 }

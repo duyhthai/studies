@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestMakerFreeWebApp.Data
 {
@@ -10,20 +12,21 @@ namespace TestMakerFreeWebApp.Data
         #region Constructor
         public ApplicationUser()
         {
+
         }
         #endregion
 
         #region Properties
-        ////[Key]
-        ////[Required]
-        ////public string Id { get; set; }
+        //[Key]
+        //[Required]
+        //public string Id { get; set; }
 
-        ////[Required]
-        ////[MaxLength(128)]
-        ////public string UserName { get; set; }
+        //[Required]
+        //[MaxLength(128)]
+        //public string UserName { get; set; }
 
-        ////[Required]
-        ////public string Email { get; set; }
+        //[Required]
+        //public string Email { get; set; }
 
         public string DisplayName { get; set; }
 
@@ -44,7 +47,7 @@ namespace TestMakerFreeWebApp.Data
 
         #region Lazy-Load Properties
         /// <summary>
-        /// A list containing all the quiz created by this user.
+        /// A list of all the quiz created by this users.
         /// </summary>
         public virtual List<Quiz> Quizzes { get; set; }
         #endregion

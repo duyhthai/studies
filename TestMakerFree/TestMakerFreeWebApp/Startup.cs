@@ -36,7 +36,7 @@ namespace TestMakerFree
                     opts.Password.RequireDigit = true;
                     opts.Password.RequireLowercase = true;
                     opts.Password.RequireUppercase = true;
-                    opts.Password.RequireNonAlphanumeric = true;
+                    opts.Password.RequireNonAlphanumeric = false;
                     opts.Password.RequiredLength = 7;
                 })
                 .AddEntityFrameworkStores<ApplicationDbContext>();

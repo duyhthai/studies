@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Controllers\_deleted\" />
+    <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

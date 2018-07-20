@@ -11,6 +11,7 @@ namespace TestMakerFreeWebApp.Data
         #region Constructor
         public Quiz()
         {
+
         }
         #endregion
 
@@ -50,20 +51,20 @@ namespace TestMakerFreeWebApp.Data
         #region Lazy-Load Properties
         /// <summary>
         /// The quiz author: it will be loaded
-        /// on first user thanks to the EF Lazy-Loading feature.
+        /// on first use thanks to the EF Lazy-Loading feature.
         /// </summary>
         [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
 
         /// <summary>
-        /// A list containing all the questions related to this quiz.
-        /// It will be populated on first use thanks to the EF Lazy-Loading feature.
+        /// A list containing all the questions related to this quiz. 
+        /// It will be populaed on first use thanks to the EF Lazy-Loading feature.
         /// </summary>
         public virtual List<Question> Questions { get; set; }
 
         /// <summary>
-        /// A list containing all the results related to this quiz.
-        /// It will be populated on first use thanks to the EF Lazy-Loading feature.
+        /// A list containing all the results related to this quiz. 
+        /// It will be populaed on first use thanks to the EF Lazy-Loading feature.
         /// </summary>
         public virtual List<Result> Results { get; set; }
         #endregion
