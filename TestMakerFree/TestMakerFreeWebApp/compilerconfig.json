@@ -50,5 +50,9 @@
   {
     "outputFile": "ClientApp/app/components/quiz/quiz-search.component.css",
     "inputFile": "ClientApp/app/components/quiz/quiz-search.component.less"
+  },
+  {
+    "outputFile": "ClientApp/app/components/login/login.component.css",
+    "inputFile": "ClientApp/app/components/login/login.component.less"
   }
 ]

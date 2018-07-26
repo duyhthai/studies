@@ -14,7 +14,7 @@ import { retry } from "rxjs/operators";
 
     // perform the login
     login(username: string, password: string): Observable<boolean> {
-        var url = "api/auth/jwt";
+        var url = "api/token/auth";
         var data = {
             username: username,
             password: password,
