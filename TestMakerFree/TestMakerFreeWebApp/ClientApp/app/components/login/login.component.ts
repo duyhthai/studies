@@ -40,11 +40,6 @@ export class LoginComponent {
 
         this.authService.login(username, password)
             .subscribe(res => {
-                // login successful
-                // output the login info through a JS alert.
-                // IMPORTANT: remove this when test is done.
-                alert("Login successful! " + "USERNAME: " + username + " TOKEN: " + this.authService.getAuth()!.token);
-
                 this.router.navigate(["home"]);
             }, err => {
                 // login failed
