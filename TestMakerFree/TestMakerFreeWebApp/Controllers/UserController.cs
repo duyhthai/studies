@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using TestMakerFreeWebApp.Data;
+using TestMakerFreeWebApp.ViewModels;
 
 namespace TestMakerFreeWebApp.Controllers
 {
@@ -22,8 +23,8 @@ namespace TestMakerFreeWebApp.Controllers
         #endregion
 
         #region RESTful Conventions
-        [HttpPost()]
-        public async Task<IActionResult> Add([FromBody]UserViewModel model)
+        [HttpPut()]
+        public async Task<IActionResult> Put([FromBody]UserViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
             // if the client payload is invalid.
