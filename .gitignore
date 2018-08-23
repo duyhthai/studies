@@ -3,3 +3,9 @@
 ################################################################################
 
 /TestMakerFree/.vs
+
+CurrencyExchangePredictor/\.vs/
+
+CurrencyExchangePredictor/CurrencyExchangePredictor/bin/
+
+CurrencyExchangePredictor/CurrencyExchangePredictor/obj/
