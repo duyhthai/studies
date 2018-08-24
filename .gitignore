@@ -8,3 +8,7 @@
 /CurrencyExchange/CurrencyExchange.Predictor/.vs/CurrencyExchange.Predictor
 /CurrencyExchange/CurrencyExchange.Predictor/bin/Debug/netcoreapp2.1
 /CurrencyExchange/CurrencyExchange.Predictor/obj
+
+CurrencyExchange/CurrencyExchange\.Core/bin/
+
+CurrencyExchange/CurrencyExchange\.Core/obj/
