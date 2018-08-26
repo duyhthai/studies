@@ -1,9 +1,9 @@
 ﻿using System;
 using RestSharp;
 
-namespace CurrencyExchange.Core
+namespace CurrencyExchange.Core.Api
 {
-    public static class Utilities
+    public static class ApiHelper
     {
         public static IRestResponse ExecuteApi(string apiUrl, Method method = Method.GET)
         {

@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.IO;
 using CurrencyExchange.Core;
 using Microsoft.Extensions.Configuration;
+using CurrencyExchange.Core.Api;
+using CurrencyExchange.Core.Math;
+using System.Collections.Generic;
 
 namespace CurrencyExchange.Predictor
 {
@@ -11,31 +15,37 @@ namespace CurrencyExchange.Predictor
 
         public static void Main()
         {
-            ////var xValues = new double[]
-            ////                  {
-            ////                      1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004,
-            ////                      2005, 2006, 2007, 2008, 2009
-            ////                  };
-            ////var yValues = new double[]
-            ////                  {
-            ////                      8669269, 8595500, 8484900, 8459800, 8427400, 8384700, 8340900, 8283200, 8230400, 8190900,
-            ////                      8149468, 7932984, 7845841, 7801273, 7761049, 7720000, 7679290, 7640238, 7606551,
-            ////                      7563710
-            ////                  };
-            ////double rSquared, intercept, slope;
-            ////LinearRegression(xValues, yValues, out rSquared, out intercept, out slope);
-            ////Console.WriteLine($"R-squared = {rSquared}");
-            ////Console.WriteLine($"Intercept = {intercept}");
-            ////Console.WriteLine($"Slope = {slope}");
-            ////var predictedValue = (slope * 2017) + intercept;
-            ////Console.WriteLine($"Prediction for 2017: {predictedValue}");
-
             BuildConfiguration();
 
-            Console.WriteLine("Hello World!");
-            Console.WriteLine($"OpenExchange app id: {Configuration["OpenExchange:AppID"]}");
-            var oxrHelper = new OpenExchangeRatesHelper(Configuration["OpenExchange:AppID"]);
-            oxrHelper.GetHistoricalData("2001-02-16");
+            Console.WriteLine("Currency Exchange Predictor is running.\n");
+
+            while (true)
+            {
+                Console.WriteLine("Please input 'from' currency and 'to' currency for prediction.");
+                Console.Write("From: ");
+                string fromCurrency = Console.ReadLine().ToUpper();
+                Console.Write("To: ");
+                string toCurrency = Console.ReadLine().ToUpper();
+
+                double predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, 2017);
+                Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for 15/1/2017 is {predictedValue}\n");
+                Console.Write("Press 'Enter' to continue...");
+                Console.Read();
+            }
+        }
+
+        public static double PredictCurrencyExchangeRate(string fromCurrency, string toCurrency, int yearToPredict)
+        {
+            // Get last year rates
+            var oxrHelper = new OpenExchangeRates(Configuration["OpenExchange:AppID"]);
+            Console.WriteLine("Getting data. Please wait...");
+            Dictionary<long, double> lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, yearToPredict - 1);
+
+            // Get predicted value
+            double predictedValue = LinearRegression.PredictCurrencyExchangeRate(
+                lastYearRates.Keys.ToArray(), lastYearRates.Values.ToArray(), new DateTime(yearToPredict, 1, 15));
+
+            return predictedValue;
         }
 
         private static void BuildConfiguration()
@@ -44,60 +54,6 @@ namespace CurrencyExchange.Predictor
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
             Configuration = builder.Build();
-        }
-
-        /// <summary>
-        /// Fits a line to a collection of (x,y) points.
-        /// </summary>
-        /// <param name="xVals">The x-axis values.</param>
-        /// <param name="yVals">The y-axis values.</param>
-        /// <param name="rSquared">The r^2 value of the line.</param>
-        /// <param name="yIntercept">The y-intercept value of the line (i.e. y = ax + b, yIntercept is b).</param>
-        /// <param name="slope">The slop of the line (i.e. y = ax + b, slope is a).</param>
-        public static void LinearRegression(
-            double[] xVals,
-            double[] yVals,
-            out double rSquared,
-            out double yIntercept,
-            out double slope)
-        {
-            if (xVals.Length != yVals.Length)
-            {
-                throw new Exception("Input values should be with the same length.");
-            }
-
-            double sumOfX = 0;
-            double sumOfY = 0;
-            double sumOfXSq = 0;
-            double sumOfYSq = 0;
-            double sumCodeviates = 0;
-
-            for (var i = 0; i < xVals.Length; i++)
-            {
-                var x = xVals[i];
-                var y = yVals[i];
-                sumCodeviates += x * y;
-                sumOfX += x;
-                sumOfY += y;
-                sumOfXSq += x * x;
-                sumOfYSq += y * y;
-            }
-
-            var count = xVals.Length;
-            var ssX = sumOfXSq - ((sumOfX * sumOfX) / count);
-            var ssY = sumOfYSq - ((sumOfY * sumOfY) / count);
-
-            var rNumerator = (count * sumCodeviates) - (sumOfX * sumOfY);
-            var rDenom = (count * sumOfXSq - (sumOfX * sumOfX)) * (count * sumOfYSq - (sumOfY * sumOfY));
-            var sCo = sumCodeviates - ((sumOfX * sumOfY) / count);
-
-            var meanX = sumOfX / count;
-            var meanY = sumOfY / count;
-            var dblR = rNumerator / Math.Sqrt(rDenom);
-
-            rSquared = dblR * dblR;
-            yIntercept = meanY - ((sCo / ssX) * meanX);
-            slope = sCo / ssX;
         }
     }
 }

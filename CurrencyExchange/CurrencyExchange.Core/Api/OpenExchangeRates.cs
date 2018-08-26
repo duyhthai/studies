@@ -1,31 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace CurrencyExchange.Core
+namespace CurrencyExchange.Core.Api
 {
-    public class OpenExchangeRatesHelper
+    public class OpenExchangeRates
     {
         private string appID;
 
-        public OpenExchangeRatesHelper(string appID)
+        public OpenExchangeRates(string appID)
         {
             this.appID = appID;
         }
 
-        public HistoricalResult GetHistoricalData(string date, string baseCurrency = "USD")
+        public Rates GetHistoricalData(string date, string baseCurrency = "USD")
         {
-            var response = Utilities.ExecuteApi($"https://openexchangerates.org/api/historical/{date}.json?app_id={appID}&base={baseCurrency}");
+            var response = ApiHelper.ExecuteApi($"https://openexchangerates.org/api/historical/{date}.json?app_id={appID}&base={baseCurrency}");
             if (response != null)
             {
                 var data = JsonConvert.DeserializeObject<HistoricalResult>(response.Content);
-
+                if (data != null && data.rates != null)
+                {
+                    return data.rates;
+                }
             }
 
             return null;
+        }
+
+        public Dictionary<long, double> GetYearlyRates(string fromCurrency, string toCurrency, int year)
+        {
+            var yearlyRates = new Dictionary<long, double>();
+
+            for (int i = 1; i <= 12; i++)
+            {
+                var date = new DateTime(year, i, 15); 
+                var rates = GetHistoricalData(date.ToString("yyyy-MM-dd"), fromCurrency);
+                yearlyRates.Add(date.Ticks, (double)typeof(Rates).GetProperty(toCurrency).GetValue(rates));
+            }
+
+            return yearlyRates;
         }
     }
 
