@@ -35,15 +35,14 @@ namespace CurrencyExchange.Core.Api
             return null;
         }
 
-        public Dictionary<long, double> GetYearlyRates(string fromCurrency, string toCurrency, int year)
+        public Dictionary<int, double> GetYearlyRates(string fromCurrency, string toCurrency, int year)
         {
-            var yearlyRates = new Dictionary<long, double>();
+            var yearlyRates = new Dictionary<int, double>();
 
             for (int i = 1; i <= 12; i++)
             {
-                var date = new DateTime(year, i, 15); 
-                var rates = GetHistoricalData(date.ToString("yyyy-MM-dd"), fromCurrency);
-                yearlyRates.Add(date.Ticks, (double)typeof(Rates).GetProperty(toCurrency).GetValue(rates));
+                var rates = GetHistoricalData(new DateTime(year, i, 15).ToString("yyyy-MM-dd"), fromCurrency);
+                yearlyRates.Add(i, (double)typeof(Rates).GetProperty(toCurrency).GetValue(rates));
             }
 
             return yearlyRates;

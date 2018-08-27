@@ -8,13 +8,13 @@ namespace CurrencyExchange.Core.Math
 {
     public static class LinearRegression
     {
-        public static double PredictCurrencyExchangeRate(long[] xVals, double[] yVals, DateTime dateToPredict)
+        public static double PredictCurrencyExchangeRate(int[] xVals, double[] yVals, int monthToPredict)
         {
             // Get squared, intercept, and slope
             double rSquared, intercept, slope;
             Calculate(xVals, yVals, out rSquared, out intercept, out slope);
 
-            double predictedValue = (slope * dateToPredict.Ticks) + intercept;
+            double predictedValue = (slope * monthToPredict) + intercept;
             return predictedValue;
         }
 
@@ -27,7 +27,7 @@ namespace CurrencyExchange.Core.Math
         /// <param name="yIntercept">The y-intercept value of the line (i.e. y = ax + b, yIntercept is b).</param>
         /// <param name="slope">The slop of the line (i.e. y = ax + b, slope is a).</param>
         public static void Calculate(
-            long[] xVals,
+            int[] xVals,
             double[] yVals,
             out double rSquared,
             out double yIntercept,
@@ -35,7 +35,7 @@ namespace CurrencyExchange.Core.Math
         {
             if (xVals.Length != yVals.Length)
             {
-                throw new Exception("Values' lengths not match.");
+                throw new ArgumentException("Values' lengths not match.");
             }
 
             double sumOfX = 0;

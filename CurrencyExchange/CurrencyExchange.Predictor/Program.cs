@@ -17,18 +17,25 @@ namespace CurrencyExchange.Predictor
         {
             BuildConfiguration();
 
-            Console.WriteLine("Currency Exchange Predictor is running.\n");
+            // TODO: 
+            ////DateTime dateToPredict = new DateTime(2017, 1, 15);
+            
+            int yearToPredict = 2017;
+            double predictedValue;
+            string fromCurrency;
+            string toCurrency;
 
+            Console.WriteLine("Currency Exchange Predictor is running.\n");
             while (true)
             {
                 Console.WriteLine("Please input 'from' currency and 'to' currency for prediction.");
                 Console.Write("From: ");
-                string fromCurrency = Console.ReadLine().ToUpper();
+                fromCurrency = Console.ReadLine().ToUpper();
                 Console.Write("To: ");
-                string toCurrency = Console.ReadLine().ToUpper();
+                toCurrency = Console.ReadLine().ToUpper();
 
-                double predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, 2017);
-                Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for 15/1/2017 is {predictedValue}\n");
+                predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, yearToPredict);
+                Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for 15/1/{yearToPredict} is {predictedValue}\n");
                 Console.Write("Press 'Enter' to continue...");
                 Console.ReadLine();
             }
@@ -39,11 +46,11 @@ namespace CurrencyExchange.Predictor
             // Get last year rates
             var oxrHelper = new OpenExchangeRates(Configuration["OpenExchange:AppID"]);
             Console.WriteLine("Getting data. Please wait...");
-            Dictionary<long, double> lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, yearToPredict - 1);
+            Dictionary<int, double> lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, yearToPredict - 1);
 
             // Get predicted value
             double predictedValue = LinearRegression.PredictCurrencyExchangeRate(
-                lastYearRates.Keys.ToArray(), lastYearRates.Values.ToArray(), new DateTime(yearToPredict, 1, 15));
+                lastYearRates.Keys.ToArray(), lastYearRates.Values.ToArray(), 1);
 
             return predictedValue;
         }
