@@ -16,12 +16,19 @@ namespace CurrencyExchange.Core.Api
         public Rates GetHistoricalData(string date, string baseCurrency = "USD")
         {
             var response = ApiHelper.ExecuteApi($"https://openexchangerates.org/api/historical/{date}.json?app_id={appID}&base={baseCurrency}");
-            if (response != null)
+            if (response != null && response.Content != null)
             {
-                var data = JsonConvert.DeserializeObject<HistoricalResult>(response.Content);
-                if (data != null && data.rates != null)
+                try
                 {
-                    return data.rates;
+                    var data = JsonConvert.DeserializeObject<HistoricalResult>(response.Content);
+                    if (data != null && data.rates != null)
+                    {
+                        return data.rates;
+                    }
+                }
+                catch
+                {
+                    return null;
                 }
             }
 

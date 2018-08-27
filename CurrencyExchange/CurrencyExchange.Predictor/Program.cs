@@ -30,7 +30,7 @@ namespace CurrencyExchange.Predictor
                 double predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, 2017);
                 Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for 15/1/2017 is {predictedValue}\n");
                 Console.Write("Press 'Enter' to continue...");
-                Console.Read();
+                Console.ReadLine();
             }
         }
 

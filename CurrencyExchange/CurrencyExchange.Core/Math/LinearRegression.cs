@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CurrencyExchange.Core.Math
 {
-    public class LinearRegression
+    public static class LinearRegression
     {
         public static double PredictCurrencyExchangeRate(long[] xVals, double[] yVals, DateTime dateToPredict)
         {

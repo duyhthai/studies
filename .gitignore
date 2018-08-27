@@ -12,3 +12,5 @@
 CurrencyExchange/CurrencyExchange\.Core/bin/
 
 CurrencyExchange/CurrencyExchange\.Core/obj/
+/CurrencyExchange/CurrencyExchange.Test/bin/Debug/netcoreapp2.1
+/CurrencyExchange/CurrencyExchange.Test/obj
