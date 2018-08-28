@@ -35,14 +35,30 @@ namespace CurrencyExchange.Core.Api
             return null;
         }
 
-        public Dictionary<int, double> GetYearlyRates(string fromCurrency, string toCurrency, int year)
+        public List<KeyValuePair<int, double>> GetYearlyRates(string fromCurrency, string toCurrency, DateTime startDate)
         {
-            var yearlyRates = new Dictionary<int, double>();
+            var yearlyRates = new List<KeyValuePair<int, double>>();
+            DateTime dateToGetRates = startDate;
 
-            for (int i = 1; i <= 12; i++)
+            // Get rates in 12 months
+            for (int i = 0; i < 12; i++)
             {
-                var rates = GetHistoricalData(new DateTime(year, i, 15).ToString("yyyy-MM-dd"), fromCurrency);
-                yearlyRates.Add(i, (double)typeof(Rates).GetProperty(toCurrency).GetValue(rates));
+                // Get rates
+                var rates = GetHistoricalData(dateToGetRates.ToString("yyyy-MM-dd"), fromCurrency);
+
+                if (rates != null)
+                {
+                    // Save the month and rate as a key-value pair
+                    yearlyRates.Add(new KeyValuePair<int, double>(dateToGetRates.Month, (double)typeof(Rates).GetProperty(toCurrency).GetValue(rates)));
+
+                    // Increase month
+                    dateToGetRates = dateToGetRates.AddMonths(1);
+                }
+                else
+                {
+                    // Stop when date out of range or any issues with the API
+                    break;
+                }
             }
 
             return yearlyRates;

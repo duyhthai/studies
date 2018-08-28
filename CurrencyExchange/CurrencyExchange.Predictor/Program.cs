@@ -17,45 +17,52 @@ namespace CurrencyExchange.Predictor
         {
             BuildConfiguration();
 
-            // TODO: 
-            ////DateTime dateToPredict = new DateTime(2017, 1, 15);
+            DateTime dateToPredict = new DateTime(2017, 1, 15);
+            bool predictionResult = true;
             
-            int yearToPredict = 2017;
+
+            Console.WriteLine("Currency Exchange Predictor is running.\n");
+            while (predictionResult)
+            {
+                predictionResult = ExecuteCurrencyExchangePredictor(dateToPredict);
+            }
+        }
+
+        public static bool ExecuteCurrencyExchangePredictor(DateTime dateToPredict)
+        {
             double predictedValue;
             string fromCurrency;
             string toCurrency;
 
-            Console.WriteLine("Currency Exchange Predictor is running.\n");
-            while (true)
-            {
-                Console.WriteLine("Please input 'from' currency and 'to' currency for prediction.");
-                Console.Write("From: ");
-                fromCurrency = Console.ReadLine().ToUpper();
-                Console.Write("To: ");
-                toCurrency = Console.ReadLine().ToUpper();
+            Console.WriteLine("Please input 'from' currency and 'to' currency for prediction.");
+            Console.Write("From: ");
+            fromCurrency = Console.ReadLine().Trim().ToUpper();
+            Console.Write("To: ");
+            toCurrency = Console.ReadLine().Trim().ToUpper();
 
-                predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, yearToPredict);
-                Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for 15/1/{yearToPredict} is {predictedValue}\n");
-                Console.Write("Press 'Enter' to continue...");
-                Console.ReadLine();
-            }
+            predictedValue = PredictCurrencyExchangeRate(fromCurrency, toCurrency, dateToPredict);
+            Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for {dateToPredict.ToString("d/M/yyyy")} is {predictedValue}\n");
+            Console.Write("Press 'Enter' to continue...");
+            Console.ReadLine();
+
+            return true;
         }
 
-        public static double PredictCurrencyExchangeRate(string fromCurrency, string toCurrency, int yearToPredict)
+        public static double PredictCurrencyExchangeRate(string fromCurrency, string toCurrency, DateTime dateToPredict)
         {
             // Get last year rates
             var oxrHelper = new OpenExchangeRates(Configuration["OpenExchange:AppID"]);
             Console.WriteLine("Getting data. Please wait...");
-            Dictionary<int, double> lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, yearToPredict - 1);
+            var lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, dateToPredict.AddYears(-1));
 
             // Get predicted value
             double predictedValue = LinearRegression.PredictCurrencyExchangeRate(
-                lastYearRates.Keys.ToArray(), lastYearRates.Values.ToArray(), 1);
+                lastYearRates.Select(r => r.Key).ToArray(), lastYearRates.Select(r => r.Value).ToArray(), dateToPredict.Month);
 
             return predictedValue;
         }
 
-        private static void BuildConfiguration()
+        internal static void BuildConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
