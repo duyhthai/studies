@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using CurrencyExchange.Core.Api;
-using CurrencyExchange.Core.Math;
+using CurrencyExchange.Core;
 using Microsoft.Extensions.Configuration;
 
 namespace CurrencyExchange.Predictor
@@ -44,7 +42,8 @@ namespace CurrencyExchange.Predictor
             toCurrency = Console.ReadLine().Trim().ToUpper();
 
             // Execute prediction
-            predictedValue = PredictCurrencyExchangeRate(openExchangeAppID, fromCurrency, toCurrency, dateToPredict);
+            Console.WriteLine("Getting data. Please wait...");
+            predictedValue = Utilities.PredictCurrencyExchangeRate(openExchangeAppID, fromCurrency, toCurrency, dateToPredict);
             Console.WriteLine($"The predicted currency exchange from {fromCurrency} to {toCurrency} for {dateToPredict.ToString("d/M/yyyy")} is {predictedValue}\n");
 
             // Ask to continue or not
@@ -58,20 +57,6 @@ namespace CurrencyExchange.Predictor
             {
                 return false;
             }
-        }
-
-        public static double PredictCurrencyExchangeRate(string openExchangeAppID, string fromCurrency, string toCurrency, DateTime dateToPredict)
-        {
-            // Get last year rates
-            var oxrHelper = new OpenExchangeRates(openExchangeAppID);
-            Console.WriteLine("Getting data. Please wait...");
-            var lastYearRates = oxrHelper.GetYearlyRates(fromCurrency, toCurrency, dateToPredict.AddYears(-1));
-
-            // Get predicted value
-            double predictedValue = LinearRegression.PredictCurrencyExchangeRate(
-                lastYearRates.Select(r => r.Key).ToArray(), lastYearRates.Select(r => r.Value).ToArray(), dateToPredict.Month);
-
-            return predictedValue;
         }
 
         internal static void BuildConfiguration()
