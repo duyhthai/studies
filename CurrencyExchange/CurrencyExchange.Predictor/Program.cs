@@ -21,7 +21,14 @@ namespace CurrencyExchange.Predictor
             Console.WriteLine("Currency Exchange Predictor is running.\n");
             while (predictionResult)
             {
-                predictionResult = ExecuteCurrencyExchangePredictor(openExchangeAppID, dateToPredict, lineReader);
+                try
+                {
+                    predictionResult = ExecuteCurrencyExchangePredictor(openExchangeAppID, dateToPredict, lineReader);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message + "\n");
+                }
             }
         }
 

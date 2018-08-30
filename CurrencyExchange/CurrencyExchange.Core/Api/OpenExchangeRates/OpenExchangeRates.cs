@@ -25,11 +25,16 @@ namespace CurrencyExchange.Core.Api
             // https://docs.openexchangerates.org/docs/historical-json
             var response = ApiHelper.ExecuteApi($"https://openexchangerates.org/api/historical/{date}.json?app_id={appID}&base={baseCurrency}");
 
-            if (response != null && response.Content != null)
+            if (response != null)
             {
-                try
+                if (!response.IsSuccessful)
                 {
-                    // Convert the result to our object
+                    throw new Exception(response.StatusDescription);
+                }
+
+                // Convert the result to our object
+                if (response.Content != null)
+                {
                     var data = JsonConvert.DeserializeObject<HistoricalResult>(response.Content);
 
                     if (data != null && data.rates != null)
@@ -37,13 +42,9 @@ namespace CurrencyExchange.Core.Api
                         return data.rates;
                     }
                 }
-                catch
-                {
-                    return null;
-                }
             }
 
-            return null;
+            throw new Exception("API execution failed.");
         }
 
         /// <summary>
