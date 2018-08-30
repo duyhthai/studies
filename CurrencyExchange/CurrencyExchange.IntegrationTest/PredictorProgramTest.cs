@@ -6,10 +6,18 @@ namespace CurrencyExchange.IntegrationTest
 {
     public class PredictorProgramTest
     {
-        [Fact]
-        public void Test1()
+        [Theory]
+        [InlineData("2017/1/15")]
+        [InlineData("2018/6/30")]
+        public void ExecuteProgram_ValidData_ShouldSucceed(string dateToPredict)
         {
-            ////Program.ExecuteCurrencyExchangePredictor()
+            // Act
+            string openExchangeAppID = Program.Configuration["OpenExchange:AppID"];
+            bool result = Program.ExecuteCurrencyExchangePredictor(
+                openExchangeAppID, DateTime.Parse(dateToPredict), new MockLineReader());
+
+            // Assert
+            Assert.True(result);
         }
     }
 }

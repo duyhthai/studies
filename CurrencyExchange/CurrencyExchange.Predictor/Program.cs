@@ -7,26 +7,41 @@ namespace CurrencyExchange.Predictor
 {
     public class Program
     {
-        public static IConfiguration Configuration { get; set; }
+        private static IConfiguration configuration;
 
         public static void Main()
         {
-            BuildConfiguration();
-
             // Declare variables
             string openExchangeAppID = Configuration["OpenExchange:AppID"];
-            DateTime dateToPredict = new DateTime(2017, 1, 15);
+            var dateToPredict = new DateTime(2017, 1, 15);
+            var lineReader = new ConsoleLineReader();
             bool predictionResult = true;
 
             // Run program
             Console.WriteLine("Currency Exchange Predictor is running.\n");
             while (predictionResult)
             {
-                predictionResult = ExecuteCurrencyExchangePredictor(openExchangeAppID, dateToPredict);
+                predictionResult = ExecuteCurrencyExchangePredictor(openExchangeAppID, dateToPredict, lineReader);
             }
         }
 
-        public static bool ExecuteCurrencyExchangePredictor(string openExchangeAppID, DateTime dateToPredict)
+        public static IConfiguration Configuration
+        {
+            get
+            {
+                if (configuration == null)
+                {
+                    var builder = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json");
+                    configuration = builder.Build();
+                }
+
+                return configuration;
+            }
+        }
+
+        public static bool ExecuteCurrencyExchangePredictor(string openExchangeAppID, DateTime dateToPredict, ConsoleLineReader lineReader)
         {
             // Declare variables
             string fromCurrency;
@@ -37,9 +52,9 @@ namespace CurrencyExchange.Predictor
             // Get From and To currencies
             Console.WriteLine("Please input 'from' currency and 'to' currency for prediction.");
             Console.Write("From: ");
-            fromCurrency = Console.ReadLine().Trim().ToUpper();
+            fromCurrency = lineReader.ReadLine().ToUpper();
             Console.Write("To: ");
-            toCurrency = Console.ReadLine().Trim().ToUpper();
+            toCurrency = lineReader.ReadLine().ToUpper();
 
             // Execute prediction
             Console.WriteLine("Getting data. Please wait...");
@@ -48,8 +63,8 @@ namespace CurrencyExchange.Predictor
 
             // Ask to continue or not
             Console.Write("Do you want a new prediction? (y/N) ");
-            shouldContinue = Console.ReadLine();
-            if (shouldContinue.Trim().ToLower() == "y")
+            shouldContinue = lineReader.Confirm();
+            if (shouldContinue == "y")
             {
                 return true;
             }
@@ -57,14 +72,6 @@ namespace CurrencyExchange.Predictor
             {
                 return false;
             }
-        }
-
-        internal static void BuildConfiguration()
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json");
-            Configuration = builder.Build();
         }
     }
 }

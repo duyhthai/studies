@@ -1,4 +1,3 @@
-using System;
 using CurrencyExchange.Core.Api;
 using Xunit;
 
