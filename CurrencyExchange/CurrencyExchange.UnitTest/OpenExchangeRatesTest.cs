@@ -1,3 +1,4 @@
+using System;
 using CurrencyExchange.Core.Api;
 using Xunit;
 
@@ -9,7 +10,7 @@ namespace CurrencyExchange.UnitTest
 
         public OpenExchangeRatesTest()
         {
-            openExchangeRate = new OpenExchangeRates("20918cbea86a4c51b1d8d4886d0afb7a");
+            openExchangeRate = new OpenExchangeRates("e4280622a7e442b9959a19f7e52745c1");
         }
 
         [Theory]
@@ -30,10 +31,10 @@ namespace CurrencyExchange.UnitTest
         public void GetHistoricalData_InvalidData_ShouldFail(string date, string baseCurrency)
         {
             // Act
-            Rates rates = openExchangeRate.GetHistoricalData(date, baseCurrency);
+            Action act = () => openExchangeRate.GetHistoricalData(date, baseCurrency);
 
             // Assert
-            Assert.Null(rates);
+            Assert.Throws<Exception>(act);
         }
     }
 }
