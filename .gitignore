@@ -3,3 +3,16 @@
 ################################################################################
 
 /TestMakerFree/.vs
+
+/CurrencyExchange/.vs
+/CurrencyExchange/CurrencyExchange.Predictor/.vs/CurrencyExchange.Predictor
+/CurrencyExchange/CurrencyExchange.Predictor/bin/Debug/netcoreapp2.1
+/CurrencyExchange/CurrencyExchange.Predictor/obj
+
+CurrencyExchange/CurrencyExchange\.Core/bin/
+
+CurrencyExchange/CurrencyExchange\.Core/obj/
+/CurrencyExchange/CurrencyExchange.IntegrationTest/bin/Debug/netcoreapp2.1
+/CurrencyExchange/CurrencyExchange.IntegrationTest/obj
+/CurrencyExchange/CurrencyExchange.UnitTest/bin/Debug/netcoreapp2.1
+/CurrencyExchange/CurrencyExchange.UnitTest/obj
