@@ -11,7 +11,7 @@ namespace CurrencyExchange.Predictor
 
         public virtual string Confirm()
         {
-            return Console.ReadLine().Trim().ToLower();
+            return ReadLine().ToLower();
         }
     }
 }
