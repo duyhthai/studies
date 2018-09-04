@@ -22,6 +22,7 @@ import { ResultListComponent } from './components/result/result-list.component'
 import { ResultEditComponent } from './components/result/result-edit.component'
 import { AboutComponent } from './components/about/about.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoginFacebookComponent } from './components/login/login.facebook.component';
 import { RegisterComponent } from './components/user/register.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 
@@ -42,6 +43,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
         ResultEditComponent,
         AboutComponent,
         LoginComponent,
+        LoginFacebookComponent,
         RegisterComponent,
         PageNotFoundComponent
     ],
