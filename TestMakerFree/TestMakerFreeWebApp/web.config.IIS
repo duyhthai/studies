@@ -4,7 +4,7 @@
     <handlers>
       <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModule" resourceType="Unspecified" />
     </handlers>
-    <aspNetCore processPath="dotnet" arguments=".\TestMakerFreeWebApp_Chapter_10.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout">
+    <aspNetCore processPath="dotnet" arguments=".\TestMakerFreeWebApp.dll" stdoutLogEnabled="true" stdoutLogFile=".\logs\stdout">
       <environmentVariables>
         <environmentVariable name="ASPNETCORE_ENVIRONMENT" value="Production" />
       </environmentVariables>
