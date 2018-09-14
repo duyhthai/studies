@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/VueJS.csproj"
+                "${workspaceFolder}/ECommerce.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
