@@ -28,18 +28,26 @@ namespace ECommerce
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<EcommerceContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            // Data context with PostgreSQL
+            services.AddDbContext<EcommerceContext>(
+                options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
+            // ASP.NET Core Identity
             services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<EcommerceContext>()
                 .AddDefaultTokenProviders();
 
+            // MVC
             services.AddMvc();
 
+            // Refactor to Features folder
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.ViewLocationExpanders.Add(new FeatureLocationExpander());
             });
+
+            // Seeder
+            DbContextExtensions.UserManager = services.BuildServiceProvider().GetService<UserManager<AppUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
