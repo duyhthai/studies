@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="details">
         <h1>{{ product.name }}</h1>
         <img :src="product.thumbnail" :alt="product.name"  />
         <p>{{ product.shortDescription }}</p>
@@ -7,6 +7,7 @@
         <p>{{ product.price }}</p>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -20,6 +21,9 @@ export default {
 };
 </script>
 
-<style>
 
+<style>
+.details {
+  padding: 20px;
+}
 </style>
