@@ -23,14 +23,16 @@
 
 
 <script>
-import ProductDetails from '.Details.vue';
+import ProductDetails from './Details.vue';
 
 export default {
     name: "product-list",
+    components: {
+        ProductDetails
+    },
     data() {
         return {
             products: [
-                //products omitted for brevity
                 {
                     name: "Samsung Galaxy S8",
                     slug: "samsung-galaxy-s8",
@@ -54,7 +56,7 @@ export default {
                     shortDescription: "Apple iPhone X smartphone with super retina display.",
                     price: 499.99,
                     description: "Nisi quaerat, fugit voluptas ducimus facilis impedit quod dicta, laborum sint iure nihil veniam aspernatur delectus officia culpa, at cupiditate? Totam minima ut deleniti laboriosam dolores cumque in, nesciunt optio! Quod recusandae voluptate facere pariatur soluta vel corrupti tenetur aut maiores, cumque mollitia fugiat laudantium error odit voluptas nobis laboriosam quo, rem deleniti? Iste quidem amet perferendis sed iusto tempora modi illo tempore quibusdam laborum? Dicta aliquam libero, facere, maxime corporis qui officiis explicabo aspernatur non consequatur mollitia iure magnam odit enim. Eligendi suscipit, optio officiis repellat eos quis iure? Omnis, error aliquid quibusdam iste amet nihil nisi cumque magni sequi enim illo autem nesciunt optio accusantium animi commodi tenetur neque eum vitae est."
-                },
+                }
             ],
             selectedProduct: null
         };
