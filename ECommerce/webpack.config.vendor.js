@@ -11,14 +11,14 @@ module.exports = (env) => {
         resolve: { extensions: [ '.js' ] },
         entry: {
             vendor: [
-                'bootstrap',
-                'bootstrap/dist/css/bootstrap.css',
-                'event-source-polyfill',
-                'isomorphic-fetch',
-                'jquery',
-                'vue',
-                'vue-router'
-            ],
+                "event-source-polyfill",
+                "isomorphic-fetch",
+                "vue",
+                "vue-router",
+                "bootstrap/dist/css/bootstrap.min.css",
+                "bootstrap-vue",
+                "nprogress/nprogress.css"
+              ],
         },
         module: {
             rules: [
