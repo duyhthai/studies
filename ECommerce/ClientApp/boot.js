@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import BootstrapVue from "bootstrap-vue";
 
 Vue.use(VueRouter);
-Vue.use(BootstrapVue);
 
 //import page components
 import Catalogue from "./pages/Catalogue.vue";

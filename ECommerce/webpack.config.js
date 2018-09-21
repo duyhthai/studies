@@ -13,15 +13,7 @@ module.exports = (env) => {
         entry: { 'main': './ClientApp/boot.js' },
         module: {
             rules: [
-                { 
-                    test: /\.vue$/, include: /ClientApp/, loader: 'vue-loader',
-                     options: {
-                         loaders: {
-                            scss: "vue-style-loader!css-loader!sass-loader",
-                            sass: "vue-style-loader!css-loader!sass-loader?indentedSyntax"
-                         }
-                     }
-                },
+                { test: /\.vue$/, include: /ClientApp/, loader: 'vue-loader' },
                 { test: /\.css$/, use: isDevBuild ? [ 'style-loader', 'css-loader' ] : ExtractTextPlugin.extract({ use: 'css-loader?minimize' }) },
                 { test: /\.(png|jpg|jpeg|gif|svg)$/, use: 'url-loader?limit=25000' }
             ]
