@@ -35,7 +35,7 @@ export default {
       Velocity(el, "slideUp", {
         duration: 250,
         easing: "ease-in-out",
-        complete: done    
+        complete: done
       });
     }
   }
