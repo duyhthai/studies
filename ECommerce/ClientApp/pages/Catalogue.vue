@@ -5,7 +5,8 @@
         <filters v-if="filters.brands.length" :filters="filters" />
       </b-col>
       <b-col cols="9">
-        <div class="clearfix">
+        <div class="mt-4 flex">
+          <search-bar class="search" />
           <product-sort />
         </div>
         <product-list v-if="products.length" :products="sortedProducts" />
@@ -20,13 +21,15 @@
     import Filters from "../components/catalogue/Filters.vue";
     import ProductList from "../components/catalogue/ProductList.vue";
     import ProductSort from "../components/catalogue/ProductSort.vue";
+    import SearchBar from "../components/catalogue/SearchBar.vue";
 
     export default {
         name: "catalogue",
         components: {
             Filters,
             ProductList,
-            ProductSort
+            ProductSort,
+            SearchBar
         },
         data() {
             return {
@@ -94,3 +97,15 @@
         }
     };
 </script>
+
+
+<style lang="scss" scoped>
+.flex {
+  display: flex;
+  flex-direction: row;
+
+  .search {
+    flex: 1;
+  }
+}
+</style>

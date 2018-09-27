@@ -19,8 +19,9 @@ namespace ECommerce.Features.Products
     }
 
     [HttpGet]
-    public async Task<IActionResult> Find(string brands, int? minPrice, int? maxPrice, int? minScreen, int? maxScreen, string capacity, string colours, string os, string features)
+    public async Task<IActionResult> Find(string q, string brands, int? minPrice, int? maxPrice, int? minScreen, int? maxScreen, string capacity, string colours, string os, string features)
     {
+        var Query = $"%{q?.ToLower()}%";
         var Brands = string.IsNullOrWhiteSpace(brands) ? new List<string>() : brands.Split('|').ToList();
         var Capacity = string.IsNullOrWhiteSpace(capacity) ? new List<int>() : capacity.Split('|').Select(int.Parse).ToList();
         var Colours = string.IsNullOrWhiteSpace(colours) ? new List<string>() : colours.Split('|').ToList();
@@ -28,6 +29,15 @@ namespace ECommerce.Features.Products
         var Features = string.IsNullOrWhiteSpace(features) ? new List<string>() : features.Split('|').ToList();
 
         var products = await _db.Products
+            .Where(x => string.IsNullOrEmpty(q) ||
+                (
+                  EF.Functions.Like(x.Name.ToLower(), Query) ||
+                  EF.Functions.Like(x.ShortDescription.ToLower(), Query) ||
+                  EF.Functions.Like(x.Description.ToLower(), Query) ||
+                  EF.Functions.Like(x.Brand.Name.ToLower(), Query) ||
+                  EF.Functions.Like(x.OS.Name.ToLower(), Query) ||
+                  x.ProductFeatures.Any(f => EF.Functions.Like(f.Feature.Name.ToLower(), Query))
+                ))
             .Where(x => !Brands.Any() || Brands.Contains(x.Brand.Name))
             .Where(x => !minPrice.HasValue || x.ProductVariants.Any(v => v.Price >= minPrice.Value))
             .Where(x => !maxPrice.HasValue || x.ProductVariants.Any(v => v.Price <= maxPrice.Value))
