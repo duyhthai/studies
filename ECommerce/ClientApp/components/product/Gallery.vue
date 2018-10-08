@@ -80,5 +80,52 @@ export default {
 </script>
 
 
-<style>
+<style lang="scss" scoped>
+.gallery {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 15000;
+
+  .prev,
+  .next {
+    position: absolute;
+    color: white;
+    cursor: pointer;
+  }
+
+  .prev,
+  .next {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .prev {
+    left: 20px;
+  }
+
+  .next {
+    right: 20px;
+  }
+
+  .slide {
+    position: relative;
+    width: 750px;
+    max-width: 90%;
+    height: 422px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+
+    img {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+  }  
+}
 </style>

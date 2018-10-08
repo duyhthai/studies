@@ -19,14 +19,27 @@
         </b-col>
         <b-col cols="7">
             <h2>{{ product.name }}</h2>
+
             <p class="mt-4 mb-4">
                 {{ product.shortDescription }}
             </p>
+
             <h5>Features</h5>
             <ul>
                 <li v-for="feature in product.features" :key="feature">{{ feature }}</li>
             </ul>
-            <p class="mt-4 mb-4">£{{ product.price }}</p>
+
+            <h5>Variants</h5>
+            <b-form-group label="Colour">
+                <b-form-select :options="product.colours" v-model="colour"/>
+            </b-form-group>
+            <b-form-group label="Capacity">
+                <b-form-select :options="product.storage" v-model="capacity"/>
+            </b-form-group>
+
+            <p class="mt-4 mb-4">
+                <b>Price:</b> £{{ variant.price }}
+            </p>
             <b-button variant="primary">Add to cart</b-button>
         </b-col>
     </b-row>
@@ -48,8 +61,13 @@
 
 
 <script>
+import Gallery from "./Gallery.vue";
+
 export default {
   name: "product-details",
+  components: {
+    Gallery
+  },
   props: {
     product: {
       type: Object,
@@ -58,17 +76,29 @@ export default {
   },
   data() {
     return {
-        open: false,
-        index: 0
+      open: false,
+      index: 0,
+      colour: null,
+      capacity: null
     };
+  },
+  computed: {
+    variant() {
+      return this.product.variants.find(
+        v => v.colourId == this.colour && v.storageId == this.capacity);
+    }
+  },
+  created() {
+    this.colour = this.product.colours[0].value;
+    this.capacity = this.product.storage[0].value;
   },
   methods: {
     back() {
-        this.$router.go(-1);
+      this.$router.go(-1);
     },
     openGallery(index) {
-        this.index = index;
-        this.open = true;
+      this.index = index;
+      this.open = true;
     }
   }
 };
