@@ -40,7 +40,9 @@
             <p class="mt-4 mb-4">
                 <b>Price:</b> £{{ variant.price }}
             </p>
-            <b-button variant="primary">Add to cart</b-button>
+            <b-button variant="primary" @click="addProductToCart">
+                Add to cart
+            </b-button>
         </b-col>
     </b-row>
 
@@ -85,7 +87,8 @@ export default {
   computed: {
     variant() {
       return this.product.variants.find(
-        v => v.colourId == this.colour && v.storageId == this.capacity);
+        v => v.colourId == this.colour && v.storageId == this.capacity
+      );
     }
   },
   created() {
@@ -99,6 +102,9 @@ export default {
     openGallery(index) {
       this.index = index;
       this.open = true;
+    },
+    addProductToCart() {
+      this.$store.dispatch("addProductToCart", this.variant);
     }
   }
 };
