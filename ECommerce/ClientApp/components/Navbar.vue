@@ -6,12 +6,15 @@
         <b-navbar-nav>
           <b-nav-item to="/products">Products</b-nav-item>
         </b-navbar-nav>
+        <b-navbar-nav class="ml-auto mr-4">
+          <b-nav-item to="/cart">Cart</b-nav-item>
+        </b-navbar-nav>
       </b-collapse>
     </b-navbar>
 </template>
 
 <script>
 export default {
-    name: "navbar"
+  name: "navbar"
 };
 </script>
