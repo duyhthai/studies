@@ -10,14 +10,17 @@
 
 
 <script>
-    import Navbar from "./Navbar.vue";
+import Navbar from "./Navbar.vue";
 
-    export default {
-        name: "app",
-        components: {
-          Navbar
-        }     
-    };
+export default {
+  name: "app",
+  components: {
+    Navbar
+  },
+  beforeCreate() {
+    this.$store.commit("initialise");
+  }
+};
 </script>
 
 

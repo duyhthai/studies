@@ -17,4 +17,9 @@ const store = new Vuex.Store({
   }
 });
 
+// Persisting data to local storage
+store.subscribe((mutation, state) => {
+  localStorage.setItem("store", JSON.stringify(state));
+});
+
 export default store;
