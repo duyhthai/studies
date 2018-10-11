@@ -1,11 +1,14 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
+import Vue from "vue";
+import VueRouter from "vue-router";
 import store from "./store";
 import BootstrapVue from "bootstrap-vue";
 import NProgress from "nprogress";
+import VueToastr from "@deveodk/vue-toastr";
+import "@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css";
 
 Vue.use(VueRouter);
 Vue.use(BootstrapVue);
+Vue.use(VueToastr, { defaultPosition: "toast-top-right" });
 
 // filters
 import { currency } from "./filters";
@@ -36,8 +39,8 @@ router.afterEach((to, from) => {
 });
 
 new Vue({
-    el: '#app-root',
-    router: router,
-    store,
-    render: h => h(require('./components/App.vue'))
+  el: "#app-root",
+  router: router,
+  store,
+  render: h => h(require("./components/App.vue"))
 });
