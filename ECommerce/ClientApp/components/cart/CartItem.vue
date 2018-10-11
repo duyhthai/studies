@@ -20,8 +20,7 @@
       {{ item.price | currency }}
     </td>
     <td>
-      <b-form-input type="number" :value="item.quantity">
-      </b-form-input>
+      <b-form-input type="number" :value="item.quantity" @change="setProductQuantity"></b-form-input>
     </td>
     <td>
       {{ item.price * item.quantity | currency }}
@@ -47,6 +46,10 @@ export default {
   methods: {
     removeProductFromCart() {
       this.$store.dispatch("removeProductFromCart", this.item);
+    },
+    setProductQuantity(quantity) {
+      const payload = { product: this.item, quantity: parseInt(quantity) };
+      this.$store.dispatch("setProductQuantity", payload);
     }
   }
 };
