@@ -9,7 +9,31 @@ namespace ECommerce.Data
     {
         public static UserManager<AppUser> UserManager { get; set; }
 
+        public static RoleManager<AppRole> RoleManager { get; set; }
+
         public static void EnsureSeeded(this EcommerceContext context)
+        {
+            AddRoles(context);
+            AddUsers(context);
+            AddColoursFeaturesAndStorage(context);
+            AddOperatingSystemsAndBrands(context);
+            AddProducts(context);
+        }
+
+        private static void AddRoles(EcommerceContext context)
+        {
+            if (!RoleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            {
+                RoleManager.CreateAsync(new AppRole("Admin")).GetAwaiter().GetResult();
+            }
+
+            if (!RoleManager.RoleExistsAsync("Customer").GetAwaiter().GetResult())
+            {
+                RoleManager.CreateAsync(new AppRole("Customer")).GetAwaiter().GetResult();
+            }
+        }
+
+        private static void AddUsers(EcommerceContext context)
         {
             if (UserManager.FindByEmailAsync("stu@ratcliffe.io").GetAwaiter().GetResult() == null)
             {
@@ -26,9 +50,12 @@ namespace ECommerce.Data
                 UserManager.CreateAsync(user, "Password1*").GetAwaiter().GetResult();
             }
 
-            AddColoursFeaturesAndStorage(context);
-            AddOperatingSystemsAndBrands(context);
-            AddProducts(context);
+            // Add role
+            var admin = UserManager.FindByEmailAsync("stu@ratcliffe.io").GetAwaiter().GetResult();
+            if (!UserManager.IsInRoleAsync(admin, "Admin").GetAwaiter().GetResult())
+            {
+                UserManager.AddToRoleAsync(admin, "Admin");
+            }
         }
 
         private static void AddColoursFeaturesAndStorage(EcommerceContext context)

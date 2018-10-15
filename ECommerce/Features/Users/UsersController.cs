@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
 using ECommerce.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Features.Users
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class UsersController : Controller
     {

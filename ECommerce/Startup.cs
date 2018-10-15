@@ -77,7 +77,9 @@ namespace ECommerce
             });
 
             // Seeder
-            DbContextExtensions.UserManager = services.BuildServiceProvider().GetService<UserManager<AppUser>>();
+            var provider = services.BuildServiceProvider();
+            DbContextExtensions.UserManager = provider.GetService<UserManager<AppUser>>();
+            DbContextExtensions.RoleManager = provider.GetService<RoleManager<AppRole>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
