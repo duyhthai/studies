@@ -8,6 +8,7 @@
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto mr-4">
           <cart-summary />
+          <auth-nav-item />
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -16,11 +17,13 @@
 
 <script>
 import CartSummary from "./cart/CartSummary.vue";
+import AuthNavItem from "./app/AuthNavItem.vue";
 
 export default {
   name: "navbar",
   components: {
-    CartSummary
+    CartSummary,
+    AuthNavItem
   }
 };
 </script>
