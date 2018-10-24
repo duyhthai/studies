@@ -31,7 +31,7 @@
                     <strong>Total: {{ total | currency }}</strong>
                 </td>
                 <td>
-                    <b-button variant="success">
+                    <b-button variant="success" @click="checkout">
                         Checkout 
                         <i class="fas fa-chevron-right"></i>
                     </b-button>
@@ -63,6 +63,9 @@ export default {
   methods: {
     continueShopping() {
       this.$router.go(-1);
+    },
+    checkout() {
+      this.$router.push("/checkout");
     }
   }
 };
