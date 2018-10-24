@@ -43,12 +43,15 @@ export const setProductQuantity = ({ state, commit }, payload) => {
 //#endregion
 
 //#region Authentication
+import axios from "axios";
+
 export const login = ({ commit }, payload) => {
   return new Promise((resolve, reject) => {
     commit("loginRequest");
     axios
       .post("/api/token", payload)
       .then(response => {
+
         const auth = response.data;
         axios.defaults.headers.common["Authorization"] = `Bearer ${
           auth.access_token

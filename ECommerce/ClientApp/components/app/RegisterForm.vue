@@ -69,7 +69,7 @@ export default {
           this.$emit("success");
         })
         .catch(error => {
-          if (typeoferror.data === "string" || error.data instanceof String) {
+          if (typeof error.data === "string" || error.data instanceof String) {
             this.errors = { error: [error.data] };
           } else {
             this.errors = error.data;
