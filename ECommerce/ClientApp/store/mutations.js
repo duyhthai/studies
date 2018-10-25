@@ -1,3 +1,8 @@
+export const initialise = (state, payload) => {
+  Object.assign(state, payload);
+};
+
+//#region Shopping Cart
 export const addProductToCart = (state, product) => {
   product.quantity = 1;
   state.cart.push(product);
@@ -21,10 +26,12 @@ export const setProductQuantity = (state, payload) => {
   state.cart.splice(payload.index, 1, cartItem);
 };
 
-export const initialise = (state, payload) => {
-    Object.assign(state, payload);
+export const clearCartItems = state => {
+  state.cart = [];
 };
+//#endregion
 
+//#region Authentication
 export const showAuthModal = state => {
   state.showAuthModal = true;
 };
@@ -61,3 +68,5 @@ export const registerSuccess = state => {
 export const registerError = state => {
   state.loading = false;
 };
+//#endregion
+
