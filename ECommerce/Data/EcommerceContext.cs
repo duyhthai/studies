@@ -6,8 +6,8 @@ namespace ECommerce.Data
 {
     public class EcommerceContext : IdentityDbContext<AppUser, AppRole, int>
     {
-        public EcommerceContext(DbContextOptions<EcommerceContext> options) :base(options)
-        {            
+        public EcommerceContext(DbContextOptions<EcommerceContext> options) : base(options)
+        {
         }
 
         public DbSet<Brand> Brands { get; set; }
@@ -19,6 +19,7 @@ namespace ECommerce.Data
         public DbSet<ProductFeature> ProductFeatures { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<Storage> Storage { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
