@@ -12,7 +12,7 @@
 
 
 <script>
-import Navbar from "./Navbar.vue";
+import Navbar from "./app/Navbar.vue";
 import AuthModal from "./app/AuthModal.vue";
 
 export default {

@@ -16,8 +16,8 @@
 
 
 <script>
-import CartSummary from "./cart/CartSummary.vue";
-import AuthNavItem from "./app/AuthNavItem.vue";
+import CartSummary from "../cart/CartSummary.vue";
+import AuthNavItem from "./AuthNavItem.vue";
 
 export default {
   name: "navbar",

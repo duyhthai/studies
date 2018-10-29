@@ -13,14 +13,16 @@ Vue.use(VueToastr, { defaultPosition: "toast-top-right" });
 Vue.use(VeeValidate);
 
 // filters
-import { currency } from "./filters";
+import { currency, date } from "./filters";
 Vue.filter("currency", currency);
+Vue.filter("date", date);
 
 // import page components
 import Catalogue from "./pages/Catalogue.vue";
 import Product from "./pages/Product.vue";
 import Cart from "./pages/Cart.vue";
 import Checkout from "./pages/Checkout.vue";
+import Account from "./pages/Account.vue";
 
 // Load data from localStorage
 import axios from "axios";
@@ -40,6 +42,7 @@ const routes = [
   { path: "/products/:slug", component: Product },
   { path: "/cart", component: Cart },
   { path: "/checkout", component: Checkout, meta: { requiresAuth: true } },
+  { path: "/account", component: Account, meta: { requiresAuth: true } },
   { path: "*", redirect: "/products" }
 ];
 
