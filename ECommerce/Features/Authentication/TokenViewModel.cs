@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace ECommerce.Features.Authentication
@@ -14,5 +16,7 @@ namespace ECommerce.Features.Authentication
         public string FirstName { get; set; }
         
         public string LastName { get; set; }
+
+        public IEnumerable<string> Roles { get; set; }
     }
 }

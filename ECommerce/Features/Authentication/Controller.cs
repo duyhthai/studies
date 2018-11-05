@@ -86,7 +86,8 @@ namespace ECommerce.Features.Authentication
                 AccessToken = new JwtSecurityTokenHandler().WriteToken(token),
                 AccessTokenExpiration = expires,
                 FirstName = user.FirstName,
-                LastName = user.LastName
+                LastName = user.LastName,
+                Roles = roles
             };
         }
     }
