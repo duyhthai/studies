@@ -87,10 +87,11 @@ namespace ECommerce.Features.Orders
         public async Task<IActionResult> List()
         {
             var orders = await _db.Orders
-              .Where(x => x.User.UserName == User.Identity.Name)
+              .Where(x => User.IsInRole("Admin") ||  x.User.UserName == User.Identity.Name)
               .Select(x => new OrderListViewModel
               {
                   Id = x.Id,
+                  Customer = x.User.FullName,
                   Placed = x.Placed,
                   Items = x.Items.Sum(i => i.Quantity),
                   Total = x.Items.Sum(i => i.ProductVariant.Price * i.Quantity),

@@ -24,6 +24,12 @@ import Cart from "./pages/Cart.vue";
 import Checkout from "./pages/Checkout.vue";
 import Account from "./pages/Account.vue";
 
+//import admin pages
+import AdminIndex from "./pages/admin/Index.vue";
+import AdminOrders from "./pages/admin/Orders.vue";
+import AdminProducts from "./pages/admin/Products.vue";
+import AdminCreateProduct from "./pages/admin/CreateProduct.vue";
+
 // Load data from localStorage
 import axios from "axios";
 const initialStore = localStorage.getItem("store");
@@ -51,6 +57,26 @@ const routes = [
     component: Account,
     meta: { requiresAuth: true, role: "Customer" }
   },
+  {
+    path: "/admin",
+    component: AdminIndex,
+    meta: { requiresAuth: true, role: "Admin" },
+    redirect: "/admin/orders",
+    children: [
+      {
+        path: "orders",
+        component: AdminOrders
+      },
+      {
+        path: "products",
+        component: AdminProducts
+      },
+      {
+        path: "products/create",
+        component: AdminCreateProduct
+      }
+    ]
+  },
   { path: "*", redirect: "/products" }
 ];
 
@@ -64,7 +90,11 @@ router.beforeEach((to, from, next) => {
       store.commit("showAuthModal");
       next({ path: from.path, query: { redirect: to.path } });
     } else {
-      if (to.matched.some(route => route.meta.role && store.getters.isInRole(route.meta.role))) {
+      if (
+        to.matched.some(
+          route => route.meta.role && store.getters.isInRole(route.meta.role)
+        )
+      ) {
         next();
       } else if (!to.matched.some(route => route.meta.role)) {
         next();
@@ -73,8 +103,14 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    if (to.matched.some(route => route.meta.role &&
-          (!store.getters.isAuthenticated || store.getters.isInRole(route.meta.role)))) {
+    if (
+      to.matched.some(
+        route =>
+          route.meta.role &&
+          (!store.getters.isAuthenticated ||
+            store.getters.isInRole(route.meta.role))
+      )
+    ) {
       next();
     } else {
       if (to.matched.some(route => route.meta.role)) {
