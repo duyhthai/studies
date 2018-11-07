@@ -135,3 +135,93 @@
     </div>
   </div>
 </template>
+
+
+<script>
+import axios from "axios";
+import FormInput from "../../components/shared/FormInput.vue";
+import FormTextArea from "../../components/shared/FormTextArea.vue";
+import Typeahead from "../../components/shared/Typeahead.vue";
+import MultiSelect from "../../components/shared/MultiSelect.vue";
+import AddVariantModal from "../../components/admin/AddVariantModal.vue";
+
+export default {
+  name: "create-product",
+  components: {
+    FormInput,
+    FormTextArea,
+    Typeahead,
+    MultiSelect,
+    AddVariantModal
+  },
+  data() {
+    return {
+      product: {
+        name: "",
+        shortDescription: "",
+        description: "",
+        talkTime: "",
+        standbyTime: "",
+        screenSize: "",
+        brand: "",
+        os: "",
+        features: [],
+        variants: []
+      },
+      brands: [],
+      os: [],
+      features: [],
+      colours: [],
+      storage: [],
+      variantsError: null
+    };
+  },
+  methods: {
+    setData(data) {
+      this.brands = data.brands;
+      this.os = data.os;
+      this.features = data.features;
+      this.colours = data.colours;
+      this.storage = data.storage;
+    },
+    save() {
+      if (this.product.variants.length <= 0) {
+        this.variantsError = "You must add at least one product variant.";
+      } else {
+        this.variantsError = null;
+      }
+
+      this.$validator.validateAll().then(result => {
+        if (result && !this.variantsError) {
+          axios
+            .post("/api/products", this.product)
+            .then(response => {
+              this.$router.push("/admin/products");
+            })
+            .catch(error => {
+              //handle server side validation
+              console.log(error.data);
+            });
+        }
+      });
+    },
+    addVariant(variant) {
+      this.product.variants.push(variant);
+    }
+  },
+  beforeRouteEnter(to, from, next) {
+    const vm = this;
+    axios.get("/api/filters").then(response => {
+      next(vm => vm.setData(response.data));
+    });
+  }
+};
+</script>
+
+
+<style lang="scss" scoped>
+.error {
+  font-size: 80%;
+  color: #dc3545;
+}
+</style>
