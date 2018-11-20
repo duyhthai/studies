@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ECommerce.Data;
+using ECommerce.Data.Entities;
+using ECommerce.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -78,26 +81,26 @@ namespace ECommerce.Features.Products
                     Images = x.Images.Select(i => i.Url),
                     Features = x.ProductFeatures.Select(f => f.Feature.Name),
                     Colours = x.ProductVariants.Select(v => new SelectListItem
-                        {
-                            Value = v.ColourId.ToString(),
-                            Text = v.Colour.Name
-                        }).Distinct(),
+                    {
+                        Value = v.ColourId.ToString(),
+                        Text = v.Colour.Name
+                    }).Distinct(),
                     Storage = x.ProductVariants.Select(v => new SelectListItem
-                        {
-                            Value = v.StorageId.ToString(),
-                            Text = v.Storage.Capacity.ToString() + "GB"
-                        }).Distinct(),
+                    {
+                        Value = v.StorageId.ToString(),
+                        Text = v.Storage.Capacity.ToString() + "GB"
+                    }).Distinct(),
                     Variants = x.ProductVariants.Select(v => new ProductVariantViewModel
-                        {
-                            ProductId = x.Id,
-                            Name = x.Name,
-                            Thumbnail = x.Thumbnail,
-                            ColourId = v.ColourId,
-                            Colour = v.Colour.Name,
-                            StorageId = v.StorageId,
-                            Capacity = $"{v.Storage.Capacity}GB",
-                            Price = v.Price
-                        })
+                    {
+                        ProductId = x.Id,
+                        Name = x.Name,
+                        Thumbnail = x.Thumbnail,
+                        ColourId = v.ColourId,
+                        Colour = v.Colour.Name,
+                        StorageId = v.StorageId,
+                        Capacity = $"{v.Storage.Capacity}GB",
+                        Price = v.Price
+                    })
                 })
             .FirstOrDefaultAsync(x => x.Slug == slug);
 
@@ -105,6 +108,78 @@ namespace ECommerce.Features.Products
                 return NotFound();
 
             return Ok(product);
+        }
+
+        [HttpPost, Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Create([FromBody] CreateProductViewModel model)
+        {
+            // Brand
+            var brand = await _db.Brands.FirstOrDefaultAsync(x => x.Name == model.Brand);
+            if (brand == null)
+                brand = new Brand { Name = model.Brand };
+
+            // OS
+            var os = await _db.OS.FirstOrDefaultAsync(x => x.Name == model.OS);
+            if (os == null)
+                os = new OS { Name = model.OS };
+
+            // Create product
+            var product = new Product
+            {
+                Name = model.Name,
+                Slug = model.Name.GenerateSlug(),
+                ShortDescription = model.ShortDescription,
+                Description = model.Description,
+                TalkTime = model.TalkTime,
+                StandbyTime = model.StandbyTime,
+                ScreenSize = model.ScreenSize,
+                Brand = brand,
+                OS = os,
+                Thumbnail = "/assets/images/thumbnail.jpeg",
+                Images = new List<Image>
+                {
+                    new Image { Url = "/assets/images/gallery1.jpeg" },
+                    new Image { Url = "/assets/images/gallery2.jpeg" },
+                    new Image { Url = "/assets/images/gallery3.jpeg" },
+                    new Image { Url = "/assets/images/gallery4.jpeg" },
+                    new Image { Url = "/assets/images/gallery5.jpeg" },
+                    new Image { Url = "/assets/images/gallery6.jpeg" }
+                }
+            };
+
+            // Features
+            foreach (var feature in model.Features)
+            {
+                var feat = await _db.Features.SingleAsync(x => x.Name == feature);
+                product.ProductFeatures.Add(new ProductFeature { Feature = feat });
+            }
+
+            // Variants
+            foreach (var variant in model.Variants)
+            {
+                var colour = await _db.Colours.FirstOrDefaultAsync(x => x.Name == variant.Colour);
+
+                if (colour == null)
+                    colour = new Colour { Name = variant.Colour };
+
+                var capacity = Convert.ToInt32(variant.Storage.Substring(0, variant.Storage.IndexOf("GB")));
+                var storage = await _db.Storage.FirstOrDefaultAsync(x => x.Capacity == capacity);
+
+                if (storage == null)
+                    storage = new Storage { Capacity = capacity };
+
+                product.ProductVariants.Add(new ProductVariant
+                {
+                    Colour = colour,
+                    Storage = storage,
+                    Price = variant.Price
+                });
+            }
+
+            _db.Products.Add(product);
+            await _db.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
