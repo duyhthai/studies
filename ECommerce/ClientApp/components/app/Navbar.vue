@@ -5,6 +5,7 @@
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item to="/products">Products</b-nav-item>
+          <b-nav-item v-if="isAdmin" to="/admin">Admin</b-nav-item>
         </b-navbar-nav>
         <b-navbar-nav class="ml-auto mr-4">
           <cart-summary v-if="isCustomer" />
@@ -26,9 +27,13 @@ export default {
     AuthNavItem
   },
   computed: {
+    isAdmin() {
+      return this.$store.getters.isInRole("Admin");
+    },
     isCustomer() {
       return (
-        this.$store.getters.isInRole("Customer") || !this.$store.getters.isAuthenticated
+        this.$store.getters.isInRole("Customer") ||
+        !this.$store.getters.isAuthenticated
       );
     }
   }
