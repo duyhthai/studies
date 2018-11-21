@@ -181,5 +181,12 @@ namespace ECommerce.Features.Products
 
             return Ok();
         }
+
+        [HttpPost("validate"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Validate([FromBody] ValidateProductViewModel model)
+        {
+            var valid = await _db.Products.AllAsync(x => x.Name.ToLower() != model.Name.ToLower());
+            return Ok(valid);
+        }
     }
 }
