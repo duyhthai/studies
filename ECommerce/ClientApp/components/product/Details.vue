@@ -31,10 +31,10 @@
 
             <h5>Variants</h5>
             <b-form-group label="Colour">
-                <b-form-select :options="product.colours" v-model="colour"/>
+                <b-form-select :options="colours" v-model="colour"/>
             </b-form-group>
             <b-form-group label="Capacity">
-                <b-form-select :options="product.storage" v-model="capacity"/>
+                <b-form-select :options="storage" v-model="capacity"/>
             </b-form-group>
 
             <p class="mt-4 mb-4">
@@ -63,6 +63,7 @@
 
 
 <script>
+import _ from "lodash";
 import Gallery from "./Gallery.vue";
 
 export default {
@@ -80,20 +81,17 @@ export default {
     return {
       open: false,
       index: 0,
+      colours: [],
       colour: null,
-      capacity: null
+      storage: [],
+      capacity: null,
+      variant: null
     };
   },
-  computed: {
-    variant() {
-      return this.product.variants.find(
-        v => v.colourId == this.colour && v.storageId == this.capacity
-      );
-    }
-  },
   created() {
-    this.colour = this.product.colours[0].value;
-    this.capacity = this.product.storage[0].value;
+    this.computeColours();
+    this.computeStorage();
+    this.computeProductVariant();
   },
   methods: {
     back() {
@@ -106,6 +104,51 @@ export default {
     addProductToCart() {
       this.$store.dispatch("addProductToCart", this.variant);
       this.$toastr("success", "Product added to cart successfully.");
+    },
+    computeColours() {
+      this.colours = _.uniqBy(
+        this.product.variants.map(v => {
+          return {
+            value: v.colourId,
+            text: v.colour
+          };
+        }),
+        "value"
+      );
+
+      this.colour = this.colours[0].value;
+    },
+    computeStorage() {
+      this.storage = this.product.variants
+        .filter(v => {
+          return v.colourId === this.colour;
+        })
+        .map(v => {
+          return {
+            value: v.storageId,
+            text: v.capacity
+          };
+        });
+
+      this.capacity = this.storage[0].value;
+    },
+    computeProductVariant() {
+      this.variant = this.product.variants.find(
+        v => v.colourId == this.colour && v.storageId == this.capacity
+      );
+    }
+  },
+  watch: {
+    colour: {
+      handler(value) {
+        this.computeStorage();
+        this.computeProductVariant();
+      }
+    },
+    capacity: {
+      handler(value) {
+        this.computeProductVariant();
+      }
     }
   }
 };

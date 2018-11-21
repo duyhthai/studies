@@ -80,27 +80,20 @@ namespace ECommerce.Features.Products
                     Thumbnail = x.Thumbnail,
                     Images = x.Images.Select(i => i.Url),
                     Features = x.ProductFeatures.Select(f => f.Feature.Name),
-                    Colours = x.ProductVariants.Select(v => new SelectListItem
-                    {
-                        Value = v.ColourId.ToString(),
-                        Text = v.Colour.Name
-                    }).Distinct(),
-                    Storage = x.ProductVariants.Select(v => new SelectListItem
-                    {
-                        Value = v.StorageId.ToString(),
-                        Text = v.Storage.Capacity.ToString() + "GB"
-                    }).Distinct(),
-                    Variants = x.ProductVariants.Select(v => new ProductVariantViewModel
-                    {
-                        ProductId = x.Id,
-                        Name = x.Name,
-                        Thumbnail = x.Thumbnail,
-                        ColourId = v.ColourId,
-                        Colour = v.Colour.Name,
-                        StorageId = v.StorageId,
-                        Capacity = $"{v.Storage.Capacity}GB",
-                        Price = v.Price
-                    })
+                    Variants = x.ProductVariants
+                        .OrderBy(v => v.Colour.Name)
+                        .ThenBy(v => v.Storage.Capacity)
+                        .Select(v => new ProductVariantViewModel
+                        {
+                            ProductId = x.Id,
+                            Name = x.Name,
+                            Thumbnail = x.Thumbnail,
+                            ColourId = v.ColourId,
+                            Colour = v.Colour.Name,
+                            StorageId = v.StorageId,
+                            Capacity = $"{v.Storage.Capacity}GB",
+                            Price = v.Price
+                        })
                 })
             .FirstOrDefaultAsync(x => x.Slug == slug);
 

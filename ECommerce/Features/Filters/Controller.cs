@@ -24,7 +24,7 @@ namespace ECommerce.Features.Features.Filters
                 .ToListAsync();
 
             var storage = await _db.Storage
-                .Select(x => x.Capacity)
+                .Select(x => $"{x.Capacity}GB")
                 .ToListAsync();
 
             var colours = await _db.Colours
