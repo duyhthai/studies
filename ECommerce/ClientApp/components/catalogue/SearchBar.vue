@@ -31,20 +31,20 @@ export default {
       this.value = newVal;
     },
     search: _.debounce(function() {
-        let query = Object.assign({}, this.$route.query);
+      let query = Object.assign({}, this.$route.query);
 
-        if (this.value.trim()) {
-            query.q = this.value;
-        } else {
-            delete query.q;
-        }
+      if (this.value.trim()) {
+        query.q = this.value;
+      } else {
+        delete query.q;
+      }
 
-        this.$router.push({ query: query });
+      this.$router.push({ query: query });
     }, 500)
   },
   watch: {
     value(newValue) {
-        this.search();
+      this.search();
     }
   }
 };

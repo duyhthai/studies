@@ -24,44 +24,44 @@ export default {
   },
   props: {
     min: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true
     },
     max: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true
     },
     interval: {
-        type: Number
+      type: Number
     },
     formatter: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     minQueryKey: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     maxQueryKey: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     }
   },
   computed: {
     value() {
-        return [
-            this.$route.query[this.minQueryKey] || this.min,
-            this.$route.query[this.maxQueryKey] || this.max
-        ];
+      return [
+        this.$route.query[this.minQueryKey] || this.min,
+        this.$route.query[this.maxQueryKey] || this.max
+      ];
     }
   },
   methods: {
     filter(values) {
-        let query = Object.assign({}, this.$route.query);
-        query[this.minQueryKey] = values[0];
-        query[this.maxQueryKey] = values[1];
+      let query = Object.assign({}, this.$route.query);
+      query[this.minQueryKey] = values[0];
+      query[this.maxQueryKey] = values[1];
 
-        this.$router.push({ query: query });
+      this.$router.push({ query: query });
     }
   }
 };

@@ -12,37 +12,37 @@
 
 <script>
 export default {
-    data() {
-        return {
-            items: [
-                "Cost (Low to high)",
-                "Cost (High to low)",
-                "Name (A - Z)",
-                "Name (Z - A)"
-            ]
-        };
-    },
-    computed: {
-        selected() {
-            return this.$route.query.sort || 0;
-        }
-    },
-    methods: {
-        select(index) {
-            if (index === 0) {
-                let query = Object.assign({}, this.$route.query);
-                delete query.sort;
-
-                this.$router.push({ query: query });
-            } else {
-                let query = Object.assign({}, this.$route.query);
-                query.sort = index;
-
-                this.$router.push({ query: query });
-            }
-        }
+  data() {
+    return {
+      items: [
+        "Cost (Low to high)",
+        "Cost (High to low)",
+        "Name (A - Z)",
+        "Name (Z - A)"
+      ]
+    };
+  },
+  computed: {
+    selected() {
+      return this.$route.query.sort || 0;
     }
-}
+  },
+  methods: {
+    select(index) {
+      if (index === 0) {
+        let query = Object.assign({}, this.$route.query);
+        delete query.sort;
+
+        this.$router.push({ query: query });
+      } else {
+        let query = Object.assign({}, this.$route.query);
+        query.sort = index;
+
+        this.$router.push({ query: query });
+      }
+    }
+  }
+};
 </script>
 
 

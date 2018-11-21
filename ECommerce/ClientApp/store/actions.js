@@ -1,4 +1,5 @@
 //#region Shopping Cart
+// context.state, context.commit
 export const addProductToCart = ({ state, commit }, product) => {
   const index = state.cart.findIndex(
     i =>

@@ -19,47 +19,47 @@ export default {
   name: "multi-select-filter",
   props: {
     queryKey: {
-        type: String,
-        required: true
+      type: String,
+      required: true
     },
     items: {
-        type: Array,
-        required: true
+      type: Array,
+      required: true
     }
   },
   computed: {
     selected() {
-        return this.$route.query[this.queryKey] || "";
+      return this.$route.query[this.queryKey] || "";
     }
   },
   methods: {
     clear() {
-        if (this.selected.length) {
-            let query = Object.assign({}, this.$route.query);
-            delete query[this.queryKey];
-
-            this.$router.push({ query: query });
-        }
-    },
-    filter(item) {
+      if (this.selected.length) {
         let query = Object.assign({}, this.$route.query);
-        let split = query[this.queryKey] ? query[this.queryKey].split("|") : [];
-
-        if (split.indexOf(item) > -1) {
-            let index = split.indexOf(item);
-            split.splice(index, 1);
-        } else {
-            split.push(item);
-        }
-
-        if (split.length) {
-            let joined = split.join("|");
-        query[this.queryKey] = joined;
-        } else {
-            delete query[this.queryKey];
-        }
+        delete query[this.queryKey];
 
         this.$router.push({ query: query });
+      }
+    },
+    filter(item) {
+      let query = Object.assign({}, this.$route.query);
+      let split = query[this.queryKey] ? query[this.queryKey].split("|") : [];
+
+      if (split.indexOf(item) > -1) {
+        let index = split.indexOf(item);
+        split.splice(index, 1);
+      } else {
+        split.push(item);
+      }
+
+      if (split.length) {
+        let joined = split.join("|");
+        query[this.queryKey] = joined;
+      } else {
+        delete query[this.queryKey];
+      }
+
+      this.$router.push({ query: query });
     }
   }
 };

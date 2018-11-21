@@ -23,18 +23,18 @@
 
 <script>
 export default {
-    name: "product-list",
-    props: {
-        products: {
-            type: Array,
-            required: true
-        }
-    },
-    methods: {
-        view(product) {
-            this.$router.push(`/products/${product.slug}`);
-        }
+  name: "product-list",
+  props: {
+    products: {
+      type: Array,
+      required: true
     }
+  },
+  methods: {
+    view(product) {
+      this.$router.push(`/products/${product.slug}`);
+    }
+  }
 };
 </script>
 
