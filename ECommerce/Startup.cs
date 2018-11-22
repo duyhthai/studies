@@ -22,9 +22,12 @@ namespace ECommerce
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IHostingEnvironment _env { get; }
+
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
@@ -32,9 +35,19 @@ namespace ECommerce
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Data context with PostgreSQL
-            services.AddDbContext<EcommerceContext>(
-                options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            // Data context
+            if (_env.EnvironmentName == EnvironmentName.Development)
+            {
+                // PostgreSQL
+                services.AddDbContext<EcommerceContext>(
+                    options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            }
+            else
+            {
+                // SQL Server
+                services.AddDbContext<EcommerceContext>(
+                    options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            }
 
             // ASP.NET Core Identity
             services.AddIdentity<AppUser, AppRole>()
