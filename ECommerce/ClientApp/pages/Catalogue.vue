@@ -9,7 +9,7 @@
           <search-bar class="search" />
           <product-sort />
         </div>
-        <product-list v-if="products.length" :products="sortedProducts" />
+        <product-list :products="sortedProducts" />
       </b-col>
     </b-row>
   </b-container>
@@ -51,22 +51,24 @@ export default {
       switch (this.sort) {
         case 1:
           return this.products.sort((a, b) => {
-            return b.price > a.price;
+            return b.price - a.price;
           });
           break;
         case 2:
           return this.products.sort((a, b) => {
-            return a.name > b.name;
+            if (a.name > b.name) return 1;
+            return -1;
           });
           break;
         case 3:
           return this.products.sort((a, b) => {
-            return b.name > a.name;
+            if (a.name > b.name) return -1;
+            return 1;
           });
           break;
         default:
           return this.products.sort((a, b) => {
-            return a.price > b.price;
+            return a.price - b.price;
           });
       }
     }
