@@ -8,25 +8,25 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Short description</th>
-            <th>Price</th>
+          <th>#</th>
+          <th>Name</th>
+          <th>Short description</th>
+          <th>Price</th>
         </tr>
-        </thead>
-        <tbody>
-            <template v-if="products && products.length > 0">
-                <tr v-for="product in products" :key="product.id">
-                <td>{{ product.id }}</td>
-                <td>{{ product.name }}</td>
-                <td>{{ product.shortDescription }}</td>
-                <td>{{ product.price | currency }}</td>
-                </tr>
-            </template>
-            <tr v-else>
-                <td colspan="3">There are no products to display.</td>
-            </tr>
-        </tbody>
+      </thead>
+      <tbody>
+        <template v-if="products && products.length > 0">
+          <tr v-for="product in products" :key="product.id">
+            <td>{{ product.id }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.shortDescription }}</td>
+            <td>{{ product.price | currency }}</td>
+          </tr>
+        </template>
+        <tr v-else>
+          <td colspan="3">There are no products to display.</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </template>
@@ -37,21 +37,13 @@ import axios from "axios";
 
 export default {
   name: "products",
-  data() {
-    return {
-      products: null
-    };
-  },
-  methods: {
-    setData(products) {
-      this.products = products;
+  computed: {
+    products() {
+      return this.$store.state.products;
     }
   },
-  beforeRouteEnter(to, from, next) {
-    const vm = this;
-    axios.get("/api/products").then(response => {
-      next(vm => vm.setData(response.data));
-    });
+  asyncData({ store }) {
+    return store.dispatch("fetchProducts");
   }
 };
 </script>

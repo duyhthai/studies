@@ -1,3 +1,5 @@
+import Cookie from "js-cookie";
+
 //#region Shopping Cart
 // context.state, context.commit
 export const addProductToCart = ({ state, commit }, product) => {
@@ -52,18 +54,19 @@ export const login = ({ commit }, payload) => {
     axios
       .post("/api/token", payload)
       .then(response => {
-
         const auth = response.data;
         axios.defaults.headers.common["Authorization"] = `Bearer ${
           auth.access_token
         }`;
         commit("loginSuccess", auth);
         commit("hideAuthModal");
+        Cookie.set("AUTH", JSON.stringify(auth));
         resolve(response);
       })
       .catch(error => {
         commit("loginError");
         delete axios.defaults.headers.common["Authorization"];
+        Cookie.remove("AUTH");
         reject(error.response);
       });
   });
@@ -85,8 +88,35 @@ export const register = ({ commit }, payload) => {
   });
 };
 
-export const logout= ({ commit }) => {
+export const logout = ({ commit }) => {
   commit("logout");
   delete axios.defaults.headers.common["Authorization"];
+  Cookie.remove("AUTH");
+};
+//#endregion
+
+//#region Products
+export const fetchProducts = ({ commit }, query) => {
+  return axios.get("/api/products", { params: query }).then(response => {
+    commit("setProducts", response.data);
+  });
+};
+
+export const fetchFilters = ({ commit }) => {
+  return axios.get("/api/filters").then(response => {
+    commit("setFilters", response.data);
+  });
+};
+
+export const fetchProduct = ({ commit }, slug) => {
+  return axios.get(`/api/products/${slug}`).then(response => {
+    commit("setProduct", response.data);
+  });
+};
+
+export const fetchOrders = ({ commit }) => {
+  return axios.get("/api/orders").then(response => {
+    commit("setOrders", response.data);
+  });
 };
 //#endregion

@@ -1,8 +1,8 @@
-export const initialise = (state, payload) => {
-  Object.assign(state, payload);
+//#region Shopping Cart
+export const setCartItems = (state, items) => {
+  state.cart = items;
 };
 
-//#region Shopping Cart
 export const addProductToCart = (state, product) => {
   product.quantity = 1;
   state.cart.push(product);
@@ -70,3 +70,20 @@ export const registerError = state => {
 };
 //#endregion
 
+//#region Products
+export const setProducts = (state, products) => {
+  state.products = products;
+};
+
+export const setFilters = (state, filters) => {
+  state.filters = filters;
+};
+
+export const setProduct = (state, product) => {
+  state.product = product;
+};
+
+export const setOrders = (state, orders) => {
+  state.orders = orders;
+};
+//#endregion

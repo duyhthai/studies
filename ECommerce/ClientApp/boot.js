@@ -20,15 +20,9 @@ Vue.filter("currency", currency);
 Vue.filter("date", date);
 
 // Load data from localStorage
-import axios from "axios";
-const initialStore = localStorage.getItem("store");
-if (initialStore) {
-  store.commit("initialise", JSON.parse(initialStore));
-  if (store.getters.isAuthenticated) {
-    axios.defaults.headers.common["Authorization"] = `Bearer ${
-      store.state.auth.access_token
-    }`;
-  }
+const cartItems = localStorage.getItem("cart");
+if (cartItems) {
+  store.commit("setCartItems", JSON.parse(cartItems));
 }
 
 new Vue({

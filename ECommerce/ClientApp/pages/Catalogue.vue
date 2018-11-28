@@ -2,14 +2,14 @@
   <b-container fluid class="page">
     <b-row>
       <b-col cols="3">
-        <filters v-if="filters.brands.length" :filters="filters" />
+        <filters v-if="filters.brands.length" :filters="filters"/>
       </b-col>
       <b-col cols="9">
         <div class="mt-4 flex">
-          <search-bar class="search" />
-          <product-sort />
+          <search-bar class="search"/>
+          <product-sort/>
         </div>
-        <product-list :products="sortedProducts" />
+        <product-list :products="sortedProducts"/>
       </b-col>
     </b-row>
   </b-container>
@@ -31,69 +31,22 @@ export default {
     ProductSort,
     SearchBar
   },
-  data() {
-    return {
-      products: [],
-      filters: {
-        brands: [],
-        capacity: [],
-        colours: [],
-        os: [],
-        features: []
-      }
-    };
-  },
   computed: {
-    sort() {
-      return this.$route.query.sort || 0;
-    },
     sortedProducts() {
-      switch (this.sort) {
-        case 1:
-          return this.products.sort((a, b) => {
-            return b.price - a.price;
-          });
-          break;
-        case 2:
-          return this.products.sort((a, b) => {
-            if (a.name > b.name) return 1;
-            return -1;
-          });
-          break;
-        case 3:
-          return this.products.sort((a, b) => {
-            if (a.name > b.name) return -1;
-            return 1;
-          });
-          break;
-        default:
-          return this.products.sort((a, b) => {
-            return a.price - b.price;
-          });
-      }
+      return this.$store.getters.sortedProducts;
+    },
+    filters() {
+      return this.$store.state.filters;
     }
   },
-  methods: {
-    setData(products, filters) {
-      this.products = products;
-      this.filters = filters;
-    }
-  },
-  beforeRouteEnter(to, from, next) {
-    axios
-      .all([
-        axios.get("/api/products", { params: to.query }),
-        axios.get("/api/filters")
-      ])
-      .then(
-        axios.spread((products, filters) => {
-          next(vm => vm.setData(products.data, filters.data));
-        })
-      );
+  asyncData({ store, route }) {
+    return Promise.all([
+      store.dispatch("fetchProducts", route.query),
+      store.dispatch("fetchFilters")
+    ]);
   },
   beforeRouteUpdate(to, from, next) {
-    axios.get("/api/products", { params: to.query }).then(response => {
-      this.products = response.data;
+    this.$store.dispatch("fetchProducts", to.query).then(() => {
       next();
     });
   }
