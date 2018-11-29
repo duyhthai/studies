@@ -1,26 +1,35 @@
 <template>
   <div class="slider">
-    <vue-slider
-      :value="value"
-      :formatter="formatter"
-      :min="min"
-      :max="max"
-      :interval="interval || 1"
-      :lazy=true
-      width="90%"
-      @callback="filter">
-    </vue-slider>
+    <no-ssr>
+      <vue-slider
+        :value="value"
+        :formatter="formatter"
+        :min="min"
+        :max="max"
+        :interval="interval || 1"
+        :lazy="true"
+        width="90%"
+        @callback="filter"
+      ></vue-slider>
+    </no-ssr>
   </div>
 </template>
 
 
 <script>
-import vueSlider from "vue-slider-component";
+import noSsr from "vue-no-ssr";
+
+// import vue-slider-component
+let vueSlider = {};
+if (typeof window !== "undefined") {
+  vueSlider = require("vue-slider-component");
+}
 
 export default {
   name: "range-filter",
   components: {
-    vueSlider
+    vueSlider,
+    noSsr
   },
   props: {
     min: {

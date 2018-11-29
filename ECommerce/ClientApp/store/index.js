@@ -30,19 +30,21 @@ const store = new Vuex.Store({
 });
 
 // Invoked each time a mutation is committed to the store
-store.subscribe((mutation, state) => {
-  const cartMutations = [
-    "addProductToCart",
-    "updateProductQuantity",
-    "removeProductFromCart",
-    "setProductQuantity",
-    "clearCartItems"
-  ];
+if (typeof window !== "undefined") {
+  store.subscribe((mutation, state) => {
+    const cartMutations = [
+      "addProductToCart",
+      "updateProductQuantity",
+      "removeProductFromCart",
+      "setProductQuantity",
+      "clearCartItems"
+    ];
 
-  // Persist the cart into local storage
-  if (cartMutations.indexOf(mutation.type) >= 0) {
-    localStorage.setItem("cart", JSON.stringify(state.cart));
-  }
-});
+    // Persist the cart into local storage
+    if (cartMutations.indexOf(mutation.type) >= 0) {
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    }
+  });
+}
 
 export default store;

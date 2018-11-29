@@ -23,18 +23,18 @@ module.exports = prerendering.createServerRenderer(function(params) {
       origin: params.origin,
       cookies: params.data.cookies
     };
-  });
-});
 
-// Render the app as a string
-bundleRenderer.renderToString(context, (err, _html) => {
-    if (err) {
-      reject(err.message);
-    }
-    resolve({
-      globals: {
-        html: _html,
-        __INITIAL_STATE__: context.state
+    // Render the app as a string
+    bundleRenderer.renderToString(context, (err, _html) => {
+      if (err) {
+        reject(err.message);
       }
+      resolve({
+        globals: {
+          html: _html,
+          __INITIAL_STATE__: context.state
+        }
+      });
     });
   });
+});

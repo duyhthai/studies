@@ -1,6 +1,6 @@
 <template>
   <b-list-group-item>
-    <div :class="{ 'header': true, 'open': open }" @click="open = !open"> 
+    <div :class="{ 'header': true, 'open': open }" @click="open = !open">
       <slot name="header"></slot>
       <i class="fas fa-chevron-down float-right"></i>
     </div>
@@ -14,7 +14,15 @@
 
 
 <script>
-import * as Velocity from "velocity-animate";
+// import velocity-animate
+let Velocity;
+if (typeof window !== "undefined") {
+  Velocity = require("velocity-animate");
+} else {
+  Velocity = function() {
+    return Promise().resolve(true);
+  };
+}
 
 export default {
   name: "filter-accordion",

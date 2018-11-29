@@ -13,27 +13,27 @@ export default context => {
         }`;
       }
     }
+
+    router.push(context.url);
+
+    // Server data fetching
+    router.onReady(() => {
+      const matchedComponents = router.getMatchedComponents();
+      if (!matchedComponents.length) {
+        return reject(new Error({ code: 404 }));
+      }
+      Promise.all(
+        matchedComponents.map(Component => {
+          if (Component.asyncData) {
+            return Component.asyncData({ store, route: router.currentRoute });
+          }
+        })
+      )
+        .then(() => {
+          context.state = store.state;
+          resolve(app);
+        })
+        .catch(reject);
+    }, reject);
   });
 };
-
-router.push(context.url);
-
-// Server data fetching
-router.onReady(() => {
-  const matchedComponents = router.getMatchedComponents();
-  if (!matchedComponents.length) {
-    return reject(new Error({ code: 404 }));
-  }
-  Promise.all(
-    matchedComponents.map(Component => {
-      if (Component.asyncData) {
-        return Component.asyncData({ store, route: router.currentRoute });
-      }
-    })
-  )
-    .then(() => {
-      context.state = store.state;
-      resolve(app);
-    })
-    .catch(reject);
-}, reject);
